@@ -7,7 +7,7 @@ const indexRouter = require('./routes/index');
 const fs = require('fs');
 const https = require('https');
 
-dotenv.config();
+require("dotenv").config();
 
 
 const app = express();
@@ -91,4 +91,4 @@ if(fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")){
 
 
 
-  module.exports = server;
+  module.exports = app;
