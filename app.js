@@ -7,10 +7,10 @@ const indexRouter = require('./routes/index');
 const fs = require('fs');
 const https = require('https');
 
-dotenv.config();
+require("dotenv").config();
 
 const app = express();
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 4000);
 
 //서버 설정
 app.use(logger('dev'));
@@ -28,4 +28,4 @@ app.use(
   
 
 
-  module.exports = server;
+  module.exports = app;
