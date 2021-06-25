@@ -10,7 +10,7 @@ const https = require('https');
 require("dotenv").config();
 
 const authRouter = require('./routes/controllers/OAuth');
-// const { sequelize } = require('./models');
+const { sequelize } = require('./models');
 const passportConfig = require('./passport')
 
 const app = express();
@@ -33,7 +33,7 @@ app.use(
     })
   );
 
-//sequelize 연동
+// sequelize 연동
 // sequelize.sync({force : false})
 //   .then(()=> {
 //     console.log('Connet Database')
@@ -81,7 +81,7 @@ app.post('/userDelete', indexRouter.user.userDelete)
 
 app.post('/oauth', indexRouter.oauth); // 오앗!!!
 
-app.post('/login', indexRouter.login.login);
+app.post('/login', indexRouter.oauth);
 app.post('/logout', indexRouter.login.logout);
 
 // 인증서 파일들이 존재하는 경우에만 https 프로토콜을 사용하는 서버를 실행합니다. 
@@ -94,11 +94,11 @@ if(fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")){
   const certificate = fs.readFileSync('.' + "/cert.pem", "utf8");
   const credentials = { key: privateKey, cert: certificate };
 
-//   server = https.createServer(credentials, app);
-//   server.listen(HTTPS_PORT, () => console.log("server runnning"));
+  server = https.createServer(credentials, app);
+  // server.listen(HTTPS_PORT, () => console.log("server runnning"));
 
 } else {
-//   server = app.listen(HTTPS_PORT)
+  // server = app.listen(HTTPS_PORT)
 }
 
 
