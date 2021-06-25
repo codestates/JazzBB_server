@@ -9,6 +9,9 @@ const https = require('https');
 
 require("dotenv").config();
 
+const authRouter = require('./routes/controllers/OAuth');
+// const { sequelize } = require('./models');
+const passportConfig = require('./passport')
 
 const app = express();
 app.set('port', process.env.PORT || 4000);
@@ -30,8 +33,17 @@ app.use(
     })
   );
 
-//라우팅
+//sequelize 연동
+// sequelize.sync({force : false})
+//   .then(()=> {
+//     console.log('Connet Database')
+//   })
+//   .catch((err) =>{
+//     console.log(err)
+//   })
+passportConfig();
 
+//라우팅
 app.post('/boardCreate', indexRouter.board.boardCreate)
 app.get('/boardRead', indexRouter.board.boardRead)
 app.post('/boardUpdate', indexRouter.board.boardUpdate)
