@@ -9,6 +9,8 @@ module.exports = () => {
         callbackURL : 'auth/kakao/callback',
     }, async (accessToken, refreshToken, profile, done) => {
         console.log('kakao profile', profile);
+        console.log('********** accessToken : ', accessToken);
+        console.log('********** refreshToken : ',refreshToken);
         try {
             const exUser = await User.findOne({
                 where : { userId : profile.id },
