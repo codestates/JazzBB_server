@@ -39,8 +39,12 @@ module.exports = (sequelize, DataTypes) => {
     defaultSeat: DataTypes.STRING,
     area: DataTypes.STRING,
     thumbnail: DataTypes.STRING,
+    address: DataTypes.STRING,
+    rating: DataTypes.STRING,
+    serviceOption: DataTypes.STRING,
+    openTime: DataTypes.STRING,
     gpsX: DataTypes.STRING,
-    gpsY: DataTypes.STRING
+    gpsY: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'jazzbar',

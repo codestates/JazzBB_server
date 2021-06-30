@@ -23,6 +23,12 @@ module.exports = {
       jazzbar_id: {
         type: Sequelize.INTEGER
       },
+      content: {
+        type: Sequelize.INTEGER
+      },
+      showCharge: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

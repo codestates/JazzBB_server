@@ -7,14 +7,19 @@ const indexRouter = require('./routes/index');
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
+const multer = require('multer');
+const upload = multer({dest : 'upload/'})
+
+
 
 require("dotenv").config();
 
-const authRouter = require('./routes/controllers/OAuth');
-const { sequelize } = require('./models');
+// const authRouter = require('./routes/controllers/OAuth');
+// const { sequelize } = require('./models');
 // const passportConfig = require('./passport')
 
 const app = express();
+
 app.set('port', process.env.PORT || 4000);
 
 // 엔진 설정
@@ -85,8 +90,14 @@ app.post('/oauth', indexRouter.oauth); // 오앗!!!
 app.get('/login', indexRouter.oauth);
 app.post('/logout', indexRouter.login.logout);
 
+//multer 설정(사진 파일 업로드)
+// single 안에 userfile은 client에서 type = 'file' name = 'userfile'로 설정해서 name을 따라 가야 에러가 발생하지 않는다.
+app.post('/upload', upload.single('userfile'), function (req, res) {
+  res.send('Uploaded');
+})
+
 //redirectURI
-app.get('')
+// app.get('')
 
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
