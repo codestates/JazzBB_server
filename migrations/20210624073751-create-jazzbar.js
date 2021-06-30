@@ -23,6 +23,18 @@ module.exports = {
       thumbnail: {
         type: Sequelize.STRING
       },
+      address: {
+        type: Sequelize.STRING
+      },
+      rating: {
+        type: Sequelize.STRING
+      },
+      serviceOption: {
+        type: Sequelize.STRING
+      },
+      openTime: {
+        type: Sequelize.STRING
+      },
       gpsX: {
         type: Sequelize.STRING
       },

@@ -26,7 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     date: DataTypes.STRING,
     player: DataTypes.STRING,
     thumbnail: DataTypes.STRING,
-    jazzbar_id: DataTypes.INTEGER
+    jazzbar_id: DataTypes.INTEGER,
+    content: DataTypes.STRING,
+    showCharge: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'show',
