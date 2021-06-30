@@ -8,7 +8,18 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const multer = require('multer');
-const upload = multer({dest : 'upload/'})
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, path.basename(file.originalname, ext)+ DataCue.now() + ext);
+  },
+}) 
+
+const upload = multer({storage : storage, limits : { filesize : 5 * 1024 * 1024 } })
 
 
 
@@ -87,7 +98,7 @@ app.post('/userDelete', indexRouter.user.userDelete)
 
 app.post('/oauth', indexRouter.oauth); // 오앗!!!
 
-app.get('/login', indexRouter.oauth);
+app.get('/login', indexRouter.login.login);
 app.post('/logout', indexRouter.login.logout);
 
 //multer 설정(사진 파일 업로드)
@@ -95,6 +106,7 @@ app.post('/logout', indexRouter.login.logout);
 app.post('/upload', upload.single('userfile'), function (req, res) {
   res.send('Uploaded');
 })
+app.user('/user', express.static('uploads'));
 
 //redirectURI
 // app.get('')
