@@ -6,20 +6,8 @@ const cors = require('cors');
 const indexRouter = require('./routes/index');
 const fs = require('fs');
 const https = require('https');
+const sequelize = require('sequelize');
 const http = require('http');
-const multer = require('multer');
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    cb(null, path.basename(file.originalname, ext)+ DataCue.now() + ext);
-  },
-}) 
-
-const upload = multer({storage : storage, limits : { filesize : 5 * 1024 * 1024 } })
 
 
 
@@ -51,7 +39,8 @@ app.use(
   );
 
 // sequelize 연동
-// sequelize.sync({force : false})
+// const models = require('./models');
+// models.sequelize.sync({force : false})
 //   .then(()=> {
 //     console.log('Connet Database')
 //   })
@@ -103,10 +92,9 @@ app.post('/logout', indexRouter.login.logout);
 
 //multer 설정(사진 파일 업로드)
 // single 안에 userfile은 client에서 type = 'file' name = 'userfile'로 설정해서 name을 따라 가야 에러가 발생하지 않는다.
-app.post('/upload', upload.single('userfile'), function (req, res) {
-  res.send('Uploaded');
-})
-app.user('/user', express.static('uploads'));
+// app.use('/image', express.static('./uploads'));
+// app.post('/uploadPost', indexRouter.image);
+
 
 //redirectURI
 // app.get('')
