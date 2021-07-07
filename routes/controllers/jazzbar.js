@@ -4,8 +4,11 @@ const { board, review, menu, subscribe, jazzbar, reservation, show, user } = req
 
 module.exports = {
   jazzbarCreate: async (req,res) => {
-    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, rating } = req.body;
+    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile } = req.body;
     //토큰 유효성 검사
+
+    //토큰에서 user_id 추출
+    const user_id = '';
 
     //thumbnail 추가
 
@@ -21,8 +24,20 @@ module.exports = {
         gpsX :  gpsX,
         gpsY :  gpsY,
         mobile :  mobile,
-        rating :  rating,
        })
+
+       // jazzbar_id를 usertable에 update.
+      const lastJazzBar = await jazzbar.findAll({
+        limit: 1,
+        order: "createdAt desc",
+      })
+      const jazzbar_id = lastJazzBar[0].dataValues.id;
+      await user.update(
+        {jazzbar_id :  jazzbar_id},
+        {where :{ 
+          userId : user_id
+        }
+      })
       return res.status(200).send("created")
     }
   },

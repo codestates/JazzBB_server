@@ -4,8 +4,12 @@ const { board, review, menu, subscribe, jazzbar, reservation, show, user } = req
 
 module.exports = {
   userRead: async (req,res) => {
-    const { userId } = req.body;
+    //토큰 유효성 검사
 
+    //토큰에서 user_id 추출
+    const user_id = '';
+
+    
     const userInfo = await user.findOne({
       where : {userId : userId}
     })
@@ -17,18 +21,16 @@ module.exports = {
     }
   },
   userUpdate: async (req, res) => {
-    const { userId, username, usertype, mobile,jazzbar_id } = req.body;
+    const { userId, username, usertype, mobile, thumbnail, jazzbar_id } = req.body;
 
     if(!userId || !username || !usertype || !mobile){
       res.status(404).send("Fill all content");
     } else {
-      await show.update({
+      await user.update({
         username : username,
-        mobile : date,
-        player : player,
+        mobile : mobile,
         thumbnail :  thumbnail,
-        content :  content,
-        showCharge : showCharge,
+        usertype : usertype,
        },{
          where :{ 
            userId : userId

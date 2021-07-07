@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
   board.init({
     user_id: DataTypes.INTEGER,
     title: DataTypes.STRING,
-    content: DataTypes.STRING
+    content: DataTypes.STRING,
+    thumbnail: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'board',

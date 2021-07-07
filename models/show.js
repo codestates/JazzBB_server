@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     jazzbar_id: DataTypes.INTEGER,
     content: DataTypes.STRING,
     showCharge: DataTypes.STRING,
+    currentSeat : DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'show',
