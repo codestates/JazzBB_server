@@ -39,14 +39,14 @@ app.use(
   );
 
 // sequelize 연동
-// const models = require('./models');
-// models.sequelize.sync({force : false})
-//   .then(()=> {
-//     console.log('Connet Database')
-//   })
-//   .catch((err) =>{
-//     console.log(err)
-//   })
+const models = require('./models');
+models.sequelize.sync({force : true})
+  .then(()=> {
+    console.log('Connet Database')
+  })
+  .catch((err) =>{
+    console.log(err)
+  })
 // passportConfig();
 
 //라우팅
@@ -80,10 +80,10 @@ app.get('/showRead', indexRouter.show.showRead)
 app.post('/showUpdate', indexRouter.show.showUpdate)
 app.post('/showDelete', indexRouter.show.showDelete)
 
-app.post('/userCreate', indexRouter.user.userCreate)
-app.get('/userRead', indexRouter.user.userRead)
-app.post('/userUpdate', indexRouter.user.userUpdate)
-app.post('/userDelete', indexRouter.user.userDelete)
+// app.post('/userCreate', indexRouter.user.userCreate) // 로그인 기능과 동일
+app.get('/userinfo', indexRouter.user.userRead)
+app.post('/userinfo', indexRouter.user.userUpdate)
+app.post('/withdraw', indexRouter.user.userDelete)
 
 app.post('/oauth', indexRouter.oauth); // 오앗!!!
 

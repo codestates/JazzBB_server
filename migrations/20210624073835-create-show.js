@@ -29,6 +29,9 @@ module.exports = {
       showCharge: {
         type: Sequelize.INTEGER
       },
+      currentSeat: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

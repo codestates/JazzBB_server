@@ -32,7 +32,7 @@ module.exports = {
       })
     }
     else if(!show_id){
-      reservationInfo = await board.findAll()
+      reservationInfo = await reservation.findAll()
       reservationData = reservationInfo.map((el) => {
           return {id : el.dataValues.id, show_id : el.dataValues.show_id, user_id : el.dataValues.user_id, people : el.dataValues.people, confirm : el.dataValues.confirm}
           });
@@ -48,10 +48,50 @@ module.exports = {
     }
   },
   reservationUpdate: async (req, res) => {
-    
+    const {id, people, confirm} = req.body;
+    //토큰 유효성 검사
+
+    //토큰에서 user_id 추출
+    const user_id = '';
+
+    //usertable에서 usertype 추출하기
+    let usertype = '';
+    if( usertype === 'boss' ){
+      await reservation.update({
+        confirm : confirm,
+      },{
+        where :{ 
+          id : id,
+        }
+      })
+      return res.status(200).send("Updated confirm state!")
+    } else {
+      await reservation.update({
+        people : people,
+      },{
+        where :{ 
+          id : id,
+        }
+      })
+      return res.status(200).send("Updated")
+    }
+
   },
+ 
   reservationDelete: async (req, res) => {
-    
+    const { id } = req.body;
+    //토큰 유효성 검사
+
+    if(!id){
+      return res.status(404).send("Not found");
+    } else {
+      await reservation.destroy({
+        where : {
+          id : id,
+      }});
+      return res.status(201).send("Deleted");
+    }
+
   },
   
 };
