@@ -1,10 +1,5 @@
-const jwt = require('jsonwebtoken');
-const express = require('express');
-const passport = require('passport');
-const User = require('../../models/user');
-// const {isLoggedIn, isNotLoggedIn } = require('./middlewares');
-// const router = express.Router();
-// const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
+// const User = require('../../models/user');
+const { user } = require("../../models");
 require('dotenv').config();
 
 let tokenData = {};
@@ -41,13 +36,13 @@ module.exports = {
         })
         .then(async (data) => {
         try {
-            const exUser = await User.findOne({
+            const exUser = await user.findOne({
                 where : { userId : data.data.id },
             });
             if (exUser) {
                 userInfo = exUser;
             } else {
-                const newUser = await User.create({
+                const newUser = await user.create({
                   userId : data.data.id,
                   username : data.data.properties.nickname,
                   thumbnail : data.data.properties.thumbnail_image,
@@ -58,8 +53,10 @@ module.exports = {
             console.error(error);
         }
     })
-    // console.log('userInfo tokenData******** : ', userInfo, tokenData)
-    return res.status(200).send({data : {username : userInfo.username, accessToken : tokenData.accessToken }})  
+    res.cookie("refreshToken", tokenData.refresh_token, {
+      httpOnly: true,
+    });
+    return res.status(200).send({data : { accessToken : tokenData.accessToken, message : 'ok' }})  
     
   },
   logout: async (req,res) => {
@@ -73,6 +70,3 @@ module.exports = {
   
   },
 };
-
-
-// module.exports = router;

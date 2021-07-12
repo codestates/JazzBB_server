@@ -1,117 +1,118 @@
-const jwt = require('jsonwebtoken') 
 const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
-
+const util = require('./utilFunction');
 
 module.exports = {
-  jazzbarCreate: async (req,res) => {
+  jazzbarCreate: async (req, res) => {
     const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile } = req.body;
     //토큰 유효성 검사
+    let newAccesstoken = util.getToken(req, res);
 
     //토큰에서 user_id 추출
-    const user_id = '';
+    let user_id = util.getUserId(req, res);
 
-    //thumbnail 추가
+    //thumbnail 받아오기
+    let thumbnail = '/image/' + req.files.filename;
 
-    if(!serviceOption || !address || !barName || !defaultSeat || !area || !gpsX || !gpsY){
+    if (!serviceOption || !address || !barName || !defaultSeat || !area || !gpsX || !gpsY) {
       res.status(404).send("not found");
     } else {
       await jazzbar.create({
-        serviceOption : serviceOption,
-        address : address,
-        barName :  barName,
-        defaultSeat :  defaultSeat,
-        area :  area,
-        gpsX :  gpsX,
-        gpsY :  gpsY,
-        mobile :  mobile,
-       })
+        serviceOption: serviceOption,
+        address: address,
+        barName: barName,
+        defaultSeat: defaultSeat,
+        area: area,
+        gpsX: gpsX,
+        gpsY: gpsY,
+        mobile: mobile,
+        thumbnail: thumbnail
+      })
 
-       // jazzbar_id를 usertable에 update.
+      // jazzbar_id를 usertable에 update.
       const lastJazzBar = await jazzbar.findAll({
         limit: 1,
         order: "createdAt desc",
       })
       const jazzbar_id = lastJazzBar[0].dataValues.id;
       await user.update(
-        {jazzbar_id :  jazzbar_id},
-        {where :{ 
-          userId : user_id
-        }
-      })
-      return res.status(200).send("created")
+        { jazzbar_id: jazzbar_id },
+        {
+          where: {
+            userId: user_id
+          }
+        })
+      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "created" })
     }
   },
-  jazzbarRead: async (req,res) => {
+  jazzbarRead: async (req, res) => {
     jazzbarInfo = await jazzbar.findAll()
     jazzbarData = jazzbarInfo.map((el) => {
       return {
-        id : el.dataValues.id, 
-        serviceOption : el.dataValues.serviceOption,
-        address : el.dataValues.address,
-        barName :  el.dataValues.barName,
-        defaultSeat :  el.dataValues.defaultSeat,
-        area :  el.dataValues.area,
-        gpsX :  el.dataValues.gpsX,
-        gpsY :  el.dataValues.gpsY,
-        mobile :  el.dataValues.mobile,
-        rating :  el.dataValues.rating,
-        thumbnail :  el.dataValues.thumbnail,
+        id: el.dataValues.id,
+        serviceOption: el.dataValues.serviceOption,
+        address: el.dataValues.address,
+        barName: el.dataValues.barName,
+        defaultSeat: el.dataValues.defaultSeat,
+        area: el.dataValues.area,
+        gpsX: el.dataValues.gpsX,
+        gpsY: el.dataValues.gpsY,
+        mobile: el.dataValues.mobile,
+        rating: el.dataValues.rating,
+        thumbnail: el.dataValues.thumbnail,
       }
     });
-    //예상 errorPoint : thumbnail이 어떻게 저장 되냐에 따라서 client에 보내주는 방식이 달라져야할수도 있음. thumbnail만 따로 보내줘야 할수도 있음.
-    if(!jazzbarInfo) {
+    if (!jazzbarInfo) {
       return res.status(404).send("not found");
     } else {
-      return res.status(200).send({data : jazzbarData, message : "OK"})
-    }    
+      return res.status(200).send({ data: jazzbarData, message: "OK" })
+    }
   },
   jazzbarUpdate: async (req, res) => {
-    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, rating } = req.body;
+    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, rating, jazzbar_id } = req.body;
     //토큰 유효성 검사
+    let newAccesstoken = util.getToken(req, res);
 
-    //토큰에서 user_id 추출 => usertable에서 jazzbar_id 추출
-    const user_id = '';
-    const jazzbar_id = '';
+    //thumbnail 받아오기
+    let thumbnail = '/image/' + req.files.filename;
 
-    if(!serviceOption || !address || !barName || !defaultSeat || !area || !gpsX || !gpsY){
+    if (!serviceOption || !address || !barName || !defaultSeat || !area || !gpsX || !gpsY) {
       res.status(404).send("not found");
     } else {
       await jazzbar.update({
-        serviceOption : serviceOption,
-        address : address,
-        barName :  barName,
-        defaultSeat :  defaultSeat,
-        area :  area,
-        gpsX :  gpsX,
-        gpsY :  gpsY,
-        mobile :  mobile,
-        rating :  rating,
-      },{
-        where :{ 
-          id : jazzbar_id
+        serviceOption: serviceOption,
+        address: address,
+        barName: barName,
+        defaultSeat: defaultSeat,
+        area: area,
+        gpsX: gpsX,
+        gpsY: gpsY,
+        mobile: mobile,
+        rating: rating,
+        thumbnail: thumbnail
+      }, {
+        where: {
+          id: jazzbar_id
         }
       })
-      return res.status(200).send("created")
+      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
     }
-
   },
   jazzbarDelete: async (req, res) => {
-    //토큰 유효성 검사
-
-    //토큰에서 user_id 추출 => usertable에서 jazzbar_id 추출
-    const user_id = '';
-    const jazzbar_id = '';
+    const { jazzbar_id } = req.body;
     const id = jazzbar_id
+    //토큰 유효성 검사
+    let newAccesstoken = util.getToken(req, res);
 
-    if(!id){
+    if (!id) {
       return res.status(404).send("Not found");
     } else {
       await jazzbar.destroy({
-        where : {
-          id : id
-      }});
-      return res.status(201).send("Deleted");
+        where: {
+          id: id
+        }
+      });
+      return res.status(201).send({data : { accessToken : newAccesstoken }, message : "Deleted"});
     }
   },
-  
+
 };
