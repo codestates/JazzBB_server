@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken') 
 const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
-
+const util = require('./utilFunction')
 
 module.exports = {
   reservationCreate: async (req,res) => {
     const { show_id, user_id, people } = req.body;
     //토큰 유효성 검사
+    let newAccesstoken = util.getToken(req, res);
 
     if(!show_id || !people || !user_id){
       res.status(404).send("not found show_id or show_id or people");
@@ -16,46 +16,57 @@ module.exports = {
         people :  people,
         confirm : pending,
        })
-      return res.status(200).send("created")
+      return res.status(200).send({data : { accessToken : newAccesstoken }, message : "created"})
     }
-
   },
   reservationRead: async (req,res) => {
-    const { show_id, user_id } = req.body;
     //토큰 유효성 검사
+    let newAccesstoken = util.getToken(req, res);
+    
+    const { show_id, user_id } = req.body;
+
     let reservationInfo;
     let reservationData;
 
-    if(!!show_id){
-      reservationInfo = await reservation.findOne({
-        where : {show_id : show_id, user_id : user_id}
+    if(user_id){
+      reservationInfo = await reservation.findAll({
+        include : [{ model : user, as : info }],
+        where : {user_id : user_id},
+      })
+    } else if(show_id){
+      reservationInfo = await reservation.findAll({
+        include : [{ model : show, as : info }],
+        where : {show_id : show_id},
       })
     }
-    else if(!show_id){
-      reservationInfo = await reservation.findAll()
-      reservationData = reservationInfo.map((el) => {
-          return {id : el.dataValues.id, show_id : el.dataValues.show_id, user_id : el.dataValues.user_id, people : el.dataValues.people, confirm : el.dataValues.confirm}
-          });
-    }
+    reservationData = reservationInfo.map((el) => {
+      return {id : el.dataValues.id, show_id : el.dataValues.show_id, user_id : el.dataValues.user_id, people : el.dataValues.people, confirm : el.dataValues.confirm, info : el.dataValues.info, }
+      });
 
-    if(!reservationInfo) {
+    if(!reservationData) {
       return res.status(404).send("not found");
     } 
-    else if(!!reservationData) {
-      return res.status(200).send({data : reservationData, message : "OK"});
-    } else {
-      return res.status(200).send({data : reservationInfo.dataValues, message : "OK"})
+    else if(reservationData) {
+      return res.status(200).send({data :{ data : reservationData,  accessToken : newAccesstoken} ,  message : "OK"});
     }
   },
   reservationUpdate: async (req, res) => {
     const {id, people, confirm} = req.body;
     //토큰 유효성 검사
+    let newAccesstoken = util.getToken(req, res);
+    if(!newAccesstoken){
+      return res.status(404).send("not found");
+    }
 
-    //토큰에서 user_id 추출
-    const user_id = '';
+    //토큰에서 user_id 추출 => userInfo 조회
+    let user_id = util.getUserId(req, res);
+    const userInfo = await user.findOne({
+      where : {userId : user_id}
+    })
 
     //usertable에서 usertype 추출하기
-    let usertype = '';
+    let usertype = userInfo.usertype;
+
     if( usertype === 'boss' ){
       await reservation.update({
         confirm : confirm,
@@ -64,7 +75,7 @@ module.exports = {
           id : id,
         }
       })
-      return res.status(200).send("Updated confirm state!")
+      return res.status(200).send({data : { accessToken : newAccesstoken }, message : "Updated confirm state!"})
     } else {
       await reservation.update({
         people : people,
@@ -73,23 +84,22 @@ module.exports = {
           id : id,
         }
       })
-      return res.status(200).send("Updated")
+      return res.status(200).send({data : { accessToken : newAccesstoken }, message : "Updated"})
     }
-
   },
- 
   reservationDelete: async (req, res) => {
     const { id } = req.body;
     //토큰 유효성 검사
+    let newAccesstoken = util.getToken(req, res);
 
-    if(!id){
+    if(!id || !newAccesstoken){
       return res.status(404).send("Not found");
     } else {
       await reservation.destroy({
         where : {
           id : id,
       }});
-      return res.status(201).send("Deleted");
+      return res.status(201).send({data : { accessToken : newAccesstoken }, message : "Deleted"});
     }
 
   },

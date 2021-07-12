@@ -8,8 +8,7 @@ const fs = require('fs');
 const https = require('https');
 const sequelize = require('sequelize');
 const http = require('http');
-
-
+const multer = require('multer')
 
 require("dotenv").config();
 
@@ -20,6 +19,28 @@ require("dotenv").config();
 const app = express();
 
 app.set('port', process.env.PORT || 4000);
+
+//multer 설정
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+  cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+  const ext = path.extname(file.originalname);
+  cb(null, path.basename(file.originalname, ext)+ Date.now() + ext);
+  },
+})
+const imageFilter = (req, file, cb) => {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+  return cb(new Error("Only image files are allowed!"));
+  }
+  cb(null, true);
+};
+app.use('/image',express.static('./uploads'));
+ 
+const upload = multer({storage : storage, limits : { filesize : 5 * 1024 * 1024 }, fileFilter: imageFilter })
+
+
 
 // 엔진 설정
 app.set('views', path.join(__dirname, 'views'));
@@ -39,66 +60,63 @@ app.use(
   );
 
 // sequelize 연동
-const models = require('./models');
-models.sequelize.sync({force : true})
-  .then(()=> {
-    console.log('Connet Database')
-  })
-  .catch((err) =>{
-    console.log(err)
-  })
+// const models = require('./models');
+// models.sequelize.sync({force : true})
+//   .then(()=> {
+//     console.log('Connet Database')
+//   })
+//   .catch((err) =>{
+//     console.log(err)
+//   })
+
 // passportConfig();
 
 //라우팅
-app.post('/boardCreate', indexRouter.board.boardCreate)
-app.get('/boardRead', indexRouter.board.boardRead)
-app.post('/boardUpdate', indexRouter.board.boardUpdate)
-app.post('/boardDelete', indexRouter.board.boardDelete)
 
-app.post('/jazzbarCreate', indexRouter.jazzbar.jazzbarCreate)
-app.get('/jazzbarRead', indexRouter.jazzbar.jazzbarRead)
-app.post('/jazzbarUpdate', indexRouter.jazzbar.jazzbarUpdate)
-app.post('/jazzbarDelete', indexRouter.jazzbar.jazzbarDelete)
+//1.user
+app.get('/login', indexRouter.login.login)
+app.post('/logout', indexRouter.login.logout)
+app.get('/userRead', indexRouter.user.userRead)
+app.post('/userinfo', upload.single('thumbnail'), indexRouter.user.userUpdate)
+app.post('/withdraw', indexRouter.user.userDelete)
 
-app.post('/menuCreate', indexRouter.menu.menuCreate)
-app.get('/menuRead', indexRouter.menu.menuRead)
-app.post('/menuUpdate', indexRouter.menu.menuUpdate)
-app.post('/menuDelete', indexRouter.menu.menuDelete)
-
-app.post('/reservationCreate', indexRouter.reservation.reservationCreate)
-app.get('/reservationRead', indexRouter.reservation.reservationRead)
-app.post('/reservationUpdate', indexRouter.reservation.reservationUpdate)
-app.post('/reservationDelete', indexRouter.reservation.reservationDelete)
-
+//2.Review
 app.post('/reviewCreate', indexRouter.review.reviewCreate)
 app.get('/reviewRead', indexRouter.review.reviewRead)
 app.post('/reviewUpdate', indexRouter.review.reviewUpdate)
 app.post('/reviewDelete', indexRouter.review.reviewDelete)
 
-app.post('/showCreate', indexRouter.show.showCreate)
+//3.Board
+app.post('/boardCreate', upload.single('thumbnail'), indexRouter.board.boardCreate)
+app.get('/boardRead', indexRouter.board.boardRead)
+app.post('/boardUpdate', upload.single('thumbnail'), indexRouter.board.boardUpdate)
+app.post('/boardDelete', indexRouter.board.boardDelete)
+
+//4. jazzbar
+app.post('/jazzbarCreate', upload.array('thumbnail'), indexRouter.jazzbar.jazzbarCreate)
+app.get('/jazzbarRead', indexRouter.jazzbar.jazzbarRead)
+app.post('/jazzbarUpdate', upload.array('thumbnail'), indexRouter.jazzbar.jazzbarUpdate)
+app.post('/jazzbarDelete', indexRouter.jazzbar.jazzbarDelete)
+
+//5. show
+app.post('/showCreate', upload.single('thumbnail'), indexRouter.show.showCreate)
 app.get('/showRead', indexRouter.show.showRead)
-app.post('/showUpdate', indexRouter.show.showUpdate)
+app.post('/showUpdate', upload.single('thumbnail'), indexRouter.show.showUpdate)
 app.post('/showDelete', indexRouter.show.showDelete)
 
-// app.post('/userCreate', indexRouter.user.userCreate) // 로그인 기능과 동일
-app.get('/userinfo', indexRouter.user.userRead)
-app.post('/userinfo', indexRouter.user.userUpdate)
-app.post('/withdraw', indexRouter.user.userDelete)
+//6. reservation
+app.post('/reservationCreate', indexRouter.reservation.reservationCreate)
+app.get('/reservationRead', indexRouter.reservation.reservationRead)
+app.post('/reservationUpdate', indexRouter.reservation.reservationUpdate)
+app.post('/reservationDelete', indexRouter.reservation.reservationDelete)
 
-app.post('/oauth', indexRouter.oauth); // 오앗!!!
+//7. menu
+app.post('/menuCreate', upload.array('thumbnail'), indexRouter.menu.menuCreate)
+app.get('/menuRead', indexRouter.menu.menuRead)
+app.post('/menuUpdate', upload.array('thumbnail'), indexRouter.menu.menuUpdate)
+app.post('/menuDelete', indexRouter.menu.menuDelete)
 
-app.get('/login', indexRouter.login.login);
-app.post('/logout', indexRouter.login.logout);
-
-//multer 설정(사진 파일 업로드)
-// single 안에 userfile은 client에서 type = 'file' name = 'userfile'로 설정해서 name을 따라 가야 에러가 발생하지 않는다.
-// app.use('/image', express.static('./uploads'));
-// app.post('/uploadPost', indexRouter.image);
-
-
-//redirectURI
-// app.get('')
-
+// app.post('/oauth', indexRouter.oauth); // 오앗!!!
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
