@@ -31,33 +31,21 @@ module.exports = {
       return res.status(200).send({data : { accessToken : newAccesstoken }, message : "created"})
     }
   },
+  // 두가지 보여주기 => 전체 & 해당 jazzbar_id 정보 이렇게 수정하기
   showRead: async (req, res) => {
     const { jazzbar_id } = req.body;
+    let showInfo = [];
 
-    //currentSeat update : 예약 후 예약 현황을 확인할때마다 update 해준다.
-    const reservationPeople = await reservation.sum('people', { where: { people: { [Op.gt]: 1 } } });
-    const defaultSeat = await jazzbar.findOne({
-      where: { id: 'jazzbar_id' },
-      attributes: ['defaultSeat']
-    });
-    const currentSeat = defaultSeat - reservationPeople;
-    await show.update({
-      currentSeat: currentSeat}, {
-        where: {
-          id: jazzbar_id
-        }
-      });
-
-    const showInfo = await show.findAll({
-      where: { jazzbar_id: jazzbar_id }
-    })
-
-    if (!showInfo) {
-      return res.status(404).send("not found");
+    if(jazzbar_id){
+      showInfo = await show.findAll({ where: { jazzbar_id: jazzbar_id }})
     } else {
-      return res.status(200).send({ data: showInfo.dataValues, message: "OK" });
+      showInfo = await show.findAll();
     }
 
+    let showData = showInfo.map((el) => {
+      return {id: el.dataValues.id, jazzbar_id: el.dataValues.jazzbar_id, time: el.dataValues.time, date: el.dataValues.date, player: el.dataValues.player, thumbnail: el.dataValues.thumbnail, content: el.dataValues.content, showCharge: el.dataValues.showCharge, currentSeat: el.dataValues.currentSeat}
+    })
+    return res.status(200).send({ data: showData, message: "OK" });
   },
   showUpdate: async (req, res) => {
     const { id, jazzbar_id, time, date, player, content, showCharge } = req.body;

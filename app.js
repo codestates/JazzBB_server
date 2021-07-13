@@ -116,6 +116,14 @@ app.get('/menuRead', indexRouter.menu.menuRead)
 app.post('/menuUpdate', upload.array('thumbnail'), indexRouter.menu.menuUpdate)
 app.post('/menuDelete', indexRouter.menu.menuDelete)
 
+//8. search
+app.get('/searchReview', indexRouter.search.searchReview)
+app.get('/searchBoard', indexRouter.search.searchBoard)
+app.get('/searchJazzbar', indexRouter.search.searchJazzbar)
+app.get('/searchShow', indexRouter.search.searchShow)
+app.get('/searchMenu', indexRouter.search.searchMenu)
+
+
 // app.post('/oauth', indexRouter.oauth); // 오앗!!!
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
