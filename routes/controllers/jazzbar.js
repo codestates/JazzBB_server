@@ -3,7 +3,7 @@ const util = require('./utilFunction');
 
 module.exports = {
   jazzbarCreate: async (req, res) => {
-    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile } = req.body;
+    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, openTime } = req.body;
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
@@ -25,7 +25,8 @@ module.exports = {
         gpsX: gpsX,
         gpsY: gpsY,
         mobile: mobile,
-        thumbnail: thumbnail
+        thumbnail: thumbnail,
+        openTime: openTime
       })
 
       // jazzbar_id를 usertable에 update.
@@ -49,16 +50,17 @@ module.exports = {
     jazzbarData = jazzbarInfo.map((el) => {
       return {
         id: el.dataValues.id,
-        serviceOption: el.dataValues.serviceOption,
-        address: el.dataValues.address,
         barName: el.dataValues.barName,
+        mobile: el.dataValues.mobile,
         defaultSeat: el.dataValues.defaultSeat,
         area: el.dataValues.area,
+        thumbnail: el.dataValues.thumbnail,
+        address: el.dataValues.address,
+        rating: el.dataValues.rating,
+        serviceOption: el.dataValues.serviceOption,
+        openTime: el.dataValues.openTime,
         gpsX: el.dataValues.gpsX,
         gpsY: el.dataValues.gpsY,
-        mobile: el.dataValues.mobile,
-        rating: el.dataValues.rating,
-        thumbnail: el.dataValues.thumbnail,
       }
     });
     if (!jazzbarInfo) {
@@ -68,7 +70,7 @@ module.exports = {
     }
   },
   jazzbarUpdate: async (req, res) => {
-    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, rating, jazzbar_id } = req.body;
+    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, rating, jazzbar_id, openTime } = req.body;
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
@@ -88,7 +90,8 @@ module.exports = {
         gpsY: gpsY,
         mobile: mobile,
         rating: rating,
-        thumbnail: thumbnail
+        thumbnail: thumbnail,
+        openTime: openTime
       }, {
         where: {
           id: jazzbar_id
