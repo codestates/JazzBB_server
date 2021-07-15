@@ -11,7 +11,7 @@ module.exports = {
     let user_id = util.getUserId(req, res);
 
     //thumbnail 받아오기
-    let thumbnail = '/image/' + req.files.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.files.filename;
 
     if (!serviceOption || !address || !barName || !defaultSeat || !area || !gpsX || !gpsY) {
       res.status(404).send("not found");
@@ -66,6 +66,7 @@ module.exports = {
     if (!jazzbarInfo) {
       return res.status(404).send("not found");
     } else {
+      console.log("****** : ", jazzbarData)
       return res.status(200).send({ data: jazzbarData, message: "OK" })
     }
   },
@@ -75,7 +76,7 @@ module.exports = {
     let newAccesstoken = util.getToken(req, res);
 
     //thumbnail 받아오기
-    let thumbnail = '/image/' + req.files.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 
     if (!serviceOption || !address || !barName || !defaultSeat || !area || !gpsX || !gpsY) {
       res.status(404).send("not found");

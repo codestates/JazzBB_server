@@ -11,7 +11,7 @@ module.exports = {
     }
 
     //thumbnail 받아오기
-    let thumbnail = '/image/' + req.files.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.files.filename;
 
     if (!name || !price || !kind || !content || !jazzbar_id || !thumbnail) {
       res.status(404).send("not found");
@@ -52,7 +52,7 @@ module.exports = {
     }
 
     //thumbnail 받아오기
-    let thumbnail = '/image/' + req.files.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.files.filename;
 
     if (!name || !price || !kind || !content || !thumbnail) {
       res.status(404).send("not found content!");
