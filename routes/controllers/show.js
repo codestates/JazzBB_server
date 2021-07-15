@@ -13,7 +13,7 @@ module.exports = {
     });
 
     //thumbnail 받아오기
-    let thumbnail = '/image/' + req.file.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 
     if (!time || !date || !player || !content || !showCharge) {
       res.status(422).send("insufficient parameters supplied");
@@ -52,7 +52,7 @@ module.exports = {
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
     //thumbnail 받아오기
-    let thumbnail = '/image/' + req.file.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 
     if (!time || !date || !player || !content || !showCharge) {
       res.status(404).send("Fill all content");

@@ -11,7 +11,7 @@ module.exports = {
     let user_id = util.getUserId(req, res);
 
     //thumbnail 받아오기
-    let thumbnail = '/image/' + req.file.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 
     if (!title || !content) {
       res.status(404).send("not found title or content");
@@ -37,7 +37,7 @@ module.exports = {
     else if (!id) {
       boardInfo = await board.findAll()
       boardData = boardInfo.map((el) => {
-        return { id: el.dataValues.id, user_id: el.dataValues.user_id, title: el.dataValues.title, content: el.dataValues.content }
+        return { id: el.dataValues.id, user_id: el.dataValues.user_id, title: el.dataValues.title, content: el.dataValues.content, thumbnail: el.dataValues.thumbnail }
       });
     }
 
@@ -45,7 +45,7 @@ module.exports = {
       return res.status(404).send("not found");
     }
     else if (boardData) {
-      return res.status(200).send({ data: { list: boardData }, message: "OK" });
+      return res.status(200).send({ data: boardData , message: "OK" });
     } else {
       return res.status(200).send({ data: boardInfo.dataValues, message: "OK" })
     }
@@ -59,7 +59,7 @@ module.exports = {
     let user_id = util.getUserId(req, res);
 
     //thumbnail 받아오기
-    let thumbnail = '/image/' + req.file.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 
     if (!title || !content) {
       res.status(404).send("not found title or content");
@@ -67,7 +67,7 @@ module.exports = {
       await board.update({
         title: title,
         content: content,
-        thumbnail : thumbnail
+        thumbnail: thumbnail
       }, {
         where: {
           id: id,
@@ -91,7 +91,7 @@ module.exports = {
           title: title
         }
       });
-      return res.status(201).send({data : { accessToken : newAccesstoken }, message : "Deleted"});
+      return res.status(201).send({ data: { accessToken: newAccesstoken }, message: "Deleted" });
     }
   },
 };

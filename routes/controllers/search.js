@@ -3,7 +3,7 @@ const { board, review, menu, jazzbar, show } = require("../../models");
 module.exports = {
     searchReview: async (req, res) => {
         const { content } = req.body;
-        let searchData = {};
+        let searchData = [];
 
         if (!content) {
             return res.status(404).send("Not found");
@@ -16,14 +16,14 @@ module.exports = {
                 })
             })
 
-            searchData.content = searchContent;
+            searchData = [ ...searchContent];
 
             return res.status(200).send({ data: searchData, message: "OK" });
         }
     },
     searchBoard: async (req, res) => {
         const { content } = req.body;
-        let searchData = {};
+        let searchData = [];
 
         if (!content) {
             return res.status(404).send("Not found");
@@ -42,14 +42,13 @@ module.exports = {
                     return { id: el.dataValues.id, user_id: el.dataValues.user_id, title: el.dataValues.title, content: el.dataValues.content }
                 })
             })
-            searchData.title = searchTitle;
-            searchData.content = searchContent;
+            searchData = [ ...searchTitle, ...searchContent ];
             return res.status(200).send({ data: searchData, message: "OK" });
         }
     },
     searchJazzbar: async (req, res) => {
         const { content } = req.body;
-        let searchData = {};
+        let searchData = [];
 
         if (!content) {
             return res.status(404).send("Not found");
@@ -91,15 +90,14 @@ module.exports = {
                 }
             })
 
-            searchData.barName = searchBarName;
-            searchData.address = searchAddress;
+            searchData = [...searchBarName, ...searchAddress];
 
             return res.status(200).send({ data: searchData, message: "OK" });
         }
     },
     searchShow: async (req, res) => {
         const { content } = req.body;
-        let searchData = {};
+        let searchData = [];
 
         if (!content) {
             return res.status(404).send("Not found");
@@ -118,14 +116,13 @@ module.exports = {
                     return { id: el.dataValues.id, jazzbar_id: el.dataValues.jazzbar_id, time: el.dataValues.time, date: el.dataValues.date, player: el.dataValues.player, thumbnail: el.dataValues.thumbnail, content: el.dataValues.content, showCharge: el.dataValues.showCharge, currentSeat: el.dataValues.currentSeat }
                 })
             })
-            searchData.player = searchPlayer;
-            searchData.content = searchContent;
+            searchData = [ ...searchPlayer, ...searchContent]
             return res.status(200).send({ data: searchData, message: "OK" });
         }
     },
     searchMenu: async (req, res) => {
         const { content } = req.body;
-        let searchData = {};
+        let searchData = [];
 
         if (!content) {
             return res.status(404).send("Not found");
@@ -145,8 +142,7 @@ module.exports = {
                 })
             })
 
-            searchData.name = searchName;
-            searchData.content = searchContent;
+            searchData = [...searchName, ...searchContent];
 
             return res.status(200).send({ data: searchData, message: "OK" });
         }

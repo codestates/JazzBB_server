@@ -1,9 +1,11 @@
 // const User = require('../../models/user');
 const { user } = require("../../models");
 require('dotenv').config();
+const axios = require('axios');
 
 let tokenData = {};
 let userInfo;
+let jazzbar_id;
 
 module.exports = { 
   login: async (req, res) => {
@@ -41,6 +43,8 @@ module.exports = {
             });
             if (exUser) {
                 userInfo = exUser;
+                jazzbar_id = exUser.jazzbar_id;
+                
             } else {
                 const newUser = await user.create({
                   userId : data.data.id,
@@ -53,10 +57,12 @@ module.exports = {
             console.error(error);
         }
     })
-    res.cookie("refreshToken", tokenData.refresh_token, {
+    
+    await res.cookie("refreshToken", tokenData.refresh_token, {
       httpOnly: true,
-    });
-    return res.status(200).send({data : { accessToken : tokenData.accessToken, message : 'ok' }})  
+    })
+    
+    return res.status(200).send({data : { accessToken : tokenData.accessToken, jazzbar_id : jazzbar_id, message : 'ok' }})  
     
   },
   logout: async (req,res) => {

@@ -8,7 +8,8 @@ const fs = require('fs');
 const https = require('https');
 const sequelize = require('sequelize');
 const http = require('http');
-const multer = require('multer')
+const multer = require('multer');
+const axios = require('axios');
 
 require("dotenv").config();
 
@@ -74,10 +75,10 @@ app.use(
 //라우팅
 
 //1.user
-app.get('/login', indexRouter.login.login)
+app.post('/login', indexRouter.login.login)
 app.post('/logout', indexRouter.login.logout)
-app.get('/userRead', indexRouter.user.userRead)
-app.post('/userinfo', upload.single('thumbnail'), indexRouter.user.userUpdate)
+app.get('/userinfo', indexRouter.user.userRead)
+app.post('/userinfo', indexRouter.user.userUpdate)
 app.post('/withdraw', indexRouter.user.userDelete)
 
 //2.Review
