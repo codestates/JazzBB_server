@@ -12,24 +12,24 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.hasMany(models.menu, {
-        foreignKey: 'jazzbar_id',
-        sourceKey : 'id',
+        // foreignKey: 'jazzbar_id',
+        // sourceKey : 'id',
+        onDelete: "cascade"
       });
       this.hasMany(models.review, {
-        foreignKey: 'jazzbar_id',
-        sourceKey : 'id',
-      });
-      this.hasMany(models.subscribe, {
-        foreignKey: 'jazzbar_id',
-        sourceKey : 'id',
+        // foreignKey: 'jazzbar_id',
+        // sourceKey : 'id',
+        onDelete: "cascade"
       });
       this.hasOne(models.user, {
-        foreignKey: 'jazzbar_id',
-        sourceKey : 'id',
+        // foreignKey: 'jazzbar_id',
+        // sourceKey : 'id',
+        onDelete: "cascade"
       });
       this.hasMany(models.show, {
-        foreignKey: 'jazzbar_id',
-        sourceKey : 'id',
+        // foreignKey: 'jazzbar_id',
+        // sourceKey : 'id',
+        onDelete: "cascade"
       });
     }
   };

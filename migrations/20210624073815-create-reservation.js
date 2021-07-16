@@ -11,18 +11,18 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         foreignKey: true,
-        // references: {
-        //   model: 'user',
-        //   key: 'id'
-        // }
+        references: {
+          model: 'users',
+          key: 'id'
+        }
 
       },
       show_id: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: 'show',
-        //   key: 'id'
-        // }
+        references: {
+          model: 'shows',
+          key: 'id'
+        }
       },
       people: {
         type: Sequelize.STRING

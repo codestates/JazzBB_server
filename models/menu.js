@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.jazzbar, {
         foreignkey : 'jazzbar_id',
-        targetKey : 'id',
+        // targetKey : 'id',
       });
     }
   };

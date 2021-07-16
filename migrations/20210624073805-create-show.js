@@ -22,10 +22,10 @@ module.exports = {
       },
       jazzbar_id: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: 'jazzbar',
-        //   key: 'id'
-        // }
+        references: {
+          model: 'jazzbars',
+          key: 'id'
+        }
       },
       content: {
         type: Sequelize.INTEGER

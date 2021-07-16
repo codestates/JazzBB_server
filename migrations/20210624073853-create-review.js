@@ -10,17 +10,17 @@ module.exports = {
       },
       board_id: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: 'board',
-        //   key: 'id'
-        // }
+        references: {
+          model: 'boards',
+          key: 'id'
+        }
       },
       jazzbar_id: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: 'jazzbar',
-        //   key: 'id'
-        // }
+        references: {
+          model: 'jazzbars',
+          key: 'id'
+        }
       },
       user_id: {
         type: Sequelize.INTEGER,

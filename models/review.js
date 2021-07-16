@@ -12,25 +12,22 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
 
-      models.review.belongsTo(models.user, { foreignKey: "user_id" });
+      // models.review.belongsTo(models.user, { foreignKey: "user_id" });
       // foreignKey 옵션은 외래키를 가지는 직접적인 컬럼을 의미합니다.
   
     
-
-
-
-      this.belongsTo(models.board, {
+      models.review.belongsTo(models.board, {
         foreignkey : 'board_id',
-        targetKey : 'id',
+        // targetKey : 'id',
       });
-      this.belongsTo(models.jazzbar, {
+      models.review.belongsTo(models.jazzbar, {
         foreignkey : 'jazzbar_id',
-        targetKey : 'id',
+        // targetKey : 'id',
       });
-      // this.belongsTo(models.user, {
-      //   foreignkey : 'user_id',
-      //   targetKey : 'id',
-      // });
+      models.review.belongsTo(models.user, {
+        foreignkey : 'user_id',
+        // targetKey : 'id',
+      });
     }
   };
   review.init({
