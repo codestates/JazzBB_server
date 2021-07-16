@@ -3,6 +3,8 @@ const util = require('./utilFunction');
 
 module.exports = {
   showCreate: async (req, res) => {
+    console.log("******** req.body: ", req.body);
+    console.log("******** req.file: ", req.file);
     const { jazzbar_id, time, date, player, content, showCharge } = req.body;
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
@@ -15,7 +17,8 @@ module.exports = {
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 
-    if (!time || !date || !player || !content || !showCharge) {
+
+    if (!time || !date || !content || !showCharge) {
       res.status(422).send("insufficient parameters supplied");
     } else {
       await show.create({

@@ -9,10 +9,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       user_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        foreignKey: true,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
+
       },
       show_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'shows',
+          key: 'id'
+        }
       },
       people: {
         type: Sequelize.STRING
