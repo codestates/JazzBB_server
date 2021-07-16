@@ -14,10 +14,12 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.user, {
         foreignkey : 'user_id',
         targetKey : 'id',
+        as : 'user'
       });
       this.belongsTo(models.show, {
         foreignkey : 'show_id',
         targetKey : 'id',
+        as : 'show'
       });
     }
   };

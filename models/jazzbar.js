@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'jazzbar_id',
         sourceKey : 'id',
       });
-      this.hasMany(models.user, {
+      this.hasOne(models.user, {
         foreignKey: 'jazzbar_id',
         sourceKey : 'id',
       });

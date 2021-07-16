@@ -9,13 +9,25 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       board_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        // references: {
+        //   model: 'board',
+        //   key: 'id'
+        // }
       },
       jazzbar_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        // references: {
+        //   model: 'jazzbar',
+        //   key: 'id'
+        // }
       },
       user_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
       },
       point: {
         type: Sequelize.STRING

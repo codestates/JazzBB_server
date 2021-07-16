@@ -24,7 +24,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       jazzbar_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        // references: {
+        //   model: 'jazzbar',
+        //   key: 'id'
+        // }
       },
       createdAt: {
         allowNull: false,

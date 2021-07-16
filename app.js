@@ -37,9 +37,10 @@ const imageFilter = (req, file, cb) => {
   }
   cb(null, true);
 };
+
+// const upload = multer({storage : storage, limits : { filesize : 5 * 1024 * 1024 }, fileFilter: imageFilter })
+const upload = multer({storage : storage}) ;
 app.use('/image',express.static('./uploads'));
- 
-const upload = multer({storage : storage, limits : { filesize : 5 * 1024 * 1024 }, fileFilter: imageFilter })
 
 
 
@@ -61,14 +62,15 @@ app.use(
   );
 
 // sequelize 연동
-// const models = require('./models');
-// models.sequelize.sync({force : true})
-//   .then(()=> {
-//     console.log('Connet Database')
-//   })
-//   .catch((err) =>{
-//     console.log(err)
-//   })
+const models = require('./models');
+models.sequelize.sync()
+// models.sequelize.sync({force : false})
+  .then(()=> {
+    console.log('Connet Database')
+  })
+  .catch((err) =>{
+    console.log(err)
+  })
 
 // passportConfig();
 
@@ -107,7 +109,7 @@ app.post('/showDelete', indexRouter.show.showDelete)
 
 //6. reservation
 app.post('/reservationCreate', indexRouter.reservation.reservationCreate)
-app.get('/reservationRead', indexRouter.reservation.reservationRead)
+app.post('/reservationRead', indexRouter.reservation.reservationRead)
 app.post('/reservationUpdate', indexRouter.reservation.reservationUpdate)
 app.post('/reservationDelete', indexRouter.reservation.reservationDelete)
 

@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
+    
+      models.user.hasMany(models.review, { onDelete: "cascade" });
+        // onDelete 옵션은 테이블간 데이터 삭제 의존관계를 설정하는데 사용됩니다. 현재는 지우시고 공식문서를 통해 공부하신 뒤 사용하세요
+      
+
       this.belongsTo(models.jazzbar, {
         foreignkey : 'jazzbar_id',
         targetKey : 'id',
@@ -18,15 +24,16 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.reservation, {
         foreignKey: 'user_id',
         sourceKey : 'id',
+        
       });
       this.hasMany(models.board, {
         foreignKey: 'user_id',
         sourceKey : 'id',
       });
-      this.hasMany(models.review, {
-        foreignKey: 'user_id',
-        sourceKey : 'id',
-      });
+      // this.hasMany(models.review, {
+      //   foreignKey: 'user_id',
+      //   sourceKey : 'id',
+      // });
       this.hasMany(models.subscribe, {
         foreignKey: 'user_id',
         sourceKey : 'id',
