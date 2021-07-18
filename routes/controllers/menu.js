@@ -4,29 +4,43 @@ const util = require('./utilFunction')
 module.exports = {
   menuCreate: async (req, res) => {
     const { jazzbarId } = req.body;
-    //토큰 유효성 검사
-    // let newAccesstoken = util.getToken(req, res);
-    console.log("******** req.body: ", req.headers);
-    console.log("******** req.body: ", req.files);
+
+    console.log("******** req.headers: ", req.headers);
+    console.log("******** req.body: ", req.body);
+    console.log("******** req.files: ", req.files);
+    
     // if(!newAccesstoken){
     //   return res.status(404).send("not found Accesstoken");
     // }
 
     //thumbnail 받아오기
-    let thumbnail = process.env.WEBSITE + '/image/' + req.files.filename;
-    console.log("******** req.file: ", thumbnail);
+
+    let thumbnail1 = process.env.WEBSITE + '/image/' + req.files[0].filename;
+    let thumbnail2 = process.env.WEBSITE + '/image/' + req.files[1].filename;
+    // let thumbnail3 = process.env.WEBSITE + '/image/' + req.files[2].filename;
+    // let thumbnail4 = process.env.WEBSITE + '/image/' + req.files[3].filename;
+    // let thumbnail5 = process.env.WEBSITE + '/image/' + req.files[4].filename;
+    console.log("******** req.file1: ", thumbnail1);
+    console.log("******** req.file2: ", thumbnail2);
 
     if (!jazzbarId) {
       res.status(404).send("not found");
     } else {
-      await menu.create({
-        // name: name,
-        // price: price,
-        // kind: kind,
-        // content: content,
-        jazzbarId: jazzbarId,
-        thumbnail: thumbnail,
-      })
+      await Promise.all(req.files.map(data => menu.create(
+        { 
+         jazzbarId: Number(jazzbarId),
+         thumbnail: process.env.WEBSITE + '/image' + data.filename
+        }
+      )))
+
+      // await menu.create({
+      //   // name: name,
+      //   // price: price,
+      //   // kind: kind,
+      //   // content: content,
+      //   jazzbarId: jazzbarId,
+      //   thumbnail: thumbnail,
+      // })
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "created" })
     }
   },
@@ -49,7 +63,7 @@ module.exports = {
   menuUpdate: async (req, res) => {
     const { name, price, kind, content } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
     if(!newAccesstoken){
       return res.status(404).send("not found Accesstoken");
     }
@@ -77,7 +91,7 @@ module.exports = {
   menuDelete: async (req, res) => {
     const { id } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
     if(!newAccesstoken){
       return res.status(404).send("not found Accesstoken");
     }

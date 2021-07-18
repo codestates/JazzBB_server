@@ -6,7 +6,7 @@ module.exports = {
     
     const { jazzbar_id, time, date, player, content, showCharge } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
     
     const currentSeat = await jazzbar.findOne({
       where: { id: 'jazzbar_id' },
@@ -53,7 +53,8 @@ module.exports = {
   showUpdate: async (req, res) => {
     const { id, jazzbar_id, time, date, player, content, showCharge } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
+
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 

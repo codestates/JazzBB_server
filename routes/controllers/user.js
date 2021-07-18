@@ -46,9 +46,9 @@ module.exports = {
   },
   userDelete: async (req, res) => {
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
     //토큰에서 userId 추출
-    let userId = util.getUserId(req, res);
+    let userId = await util.getUserId(req, res);
 
     if (!userId) {
       return res.status(404).send("not found");

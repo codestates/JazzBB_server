@@ -5,10 +5,10 @@ module.exports = {
   boardCreate: async (req, res) => {
     const { title, content } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
 
     //토큰에서 userId 추출
-    let userId = util.getUserId(req, res);
+    let userId = await util.getUserId(req, res);
 
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
@@ -53,10 +53,10 @@ module.exports = {
   boardUpdate: async (req, res) => {
     const { id, title, content } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
 
     //토큰에서 userId 추출
-    let userId = util.getUserId(req, res);
+    let userId = await util.getUserId(req, res);
 
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
@@ -80,7 +80,7 @@ module.exports = {
   boardDelete: async (req, res) => {
     const { id, title } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
 
     if (!id || !title || newAccesstoken) {
       return res.status(404).send("Not found");

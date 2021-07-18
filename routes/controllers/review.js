@@ -5,10 +5,10 @@ module.exports = {
   reviewCreate: async (req, res) => {
     const { jazzbarId, boardId, point, content } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
 
     //토큰에서 userId 추출
-    let userId = util.getUserId(req, res);
+    let userId = await util.getUserId(req, res);
 
     if (!point || !content) {
       res.status(422).send("insufficient parameters supplied");
@@ -85,10 +85,10 @@ module.exports = {
   reviewUpdate: async (req, res) => {
     const { jazzbarId, boardId, point, content } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
 
     //토큰에서 userId 추출
-    let userId = util.getUserId(req, res);
+    let userId = await util.getUserId(req, res);
 
     if (!point || !content) {
       res.status(404).send("Fill all content");
@@ -123,7 +123,7 @@ module.exports = {
   reviewDelete: async (req, res) => {
     const { id } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
 
     if (!id || !newAccesstoken) {
       return res.status(404).send("not found or Can't find token");
