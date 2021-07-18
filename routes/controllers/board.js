@@ -7,8 +7,8 @@ module.exports = {
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
-    //토큰에서 user_id 추출
-    let user_id = util.getUserId(req, res);
+    //토큰에서 userId 추출
+    let userId = util.getUserId(req, res);
 
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
@@ -17,7 +17,7 @@ module.exports = {
       res.status(404).send("not found title or content");
     } else {
       await board.create({
-        user_id: user_id,
+        userId: userId,
         title: title,
         content: content,
         thumbnail: thumbnail
@@ -37,7 +37,7 @@ module.exports = {
     else if (!id) {
       boardInfo = await board.findAll()
       boardData = boardInfo.map((el) => {
-        return { id: el.dataValues.id, user_id: el.dataValues.user_id, title: el.dataValues.title, content: el.dataValues.content, thumbnail: el.dataValues.thumbnail }
+        return { id: el.dataValues.id, userId: el.dataValues.userId, title: el.dataValues.title, content: el.dataValues.content, thumbnail: el.dataValues.thumbnail }
       });
     }
 
@@ -55,8 +55,8 @@ module.exports = {
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
-    //토큰에서 user_id 추출
-    let user_id = util.getUserId(req, res);
+    //토큰에서 userId 추출
+    let userId = util.getUserId(req, res);
 
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
@@ -71,7 +71,7 @@ module.exports = {
       }, {
         where: {
           id: id,
-          user_id: user_id
+          userId: userId
         }
       })
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })

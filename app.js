@@ -9,7 +9,7 @@ const https = require('https');
 const sequelize = require('sequelize');
 const http = require('http');
 const multer = require('multer');
-const axios = require('axios');
+// const axios = require('axios');
 
 require("dotenv").config();
 
@@ -96,9 +96,9 @@ app.post('/boardUpdate', upload.single('thumbnail'), indexRouter.board.boardUpda
 app.post('/boardDelete', indexRouter.board.boardDelete)
 
 //4. jazzbar
-app.post('/jazzbarCreate', upload.array('thumbnail'), indexRouter.jazzbar.jazzbarCreate)
+app.post('/jazzbarCreate', upload.single('thumbnail'), indexRouter.jazzbar.jazzbarCreate)
 app.get('/jazzbarRead', indexRouter.jazzbar.jazzbarRead)
-app.post('/jazzbarUpdate', upload.array('thumbnail'), indexRouter.jazzbar.jazzbarUpdate)
+app.post('/jazzbarUpdate', upload.single('thumbnail'), indexRouter.jazzbar.jazzbarUpdate)
 app.post('/jazzbarDelete', indexRouter.jazzbar.jazzbarDelete)
 
 //5. show

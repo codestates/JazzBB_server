@@ -1,30 +1,38 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('menus', {
+    await queryInterface.createTable('reviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      jazzbar_id: {
+      boardId: {
         type: Sequelize.INTEGER,
+        foreignKey: true,
+        references: {
+          model: 'boards',
+          key: 'id'
+        }
+      },
+      jazzbarId: {
+        type: Sequelize.INTEGER,
+        foreignKey: true,
         references: {
           model: 'jazzbars',
           key: 'id'
         }
       },
-      name: {
-        type: Sequelize.STRING
+      userId: {
+        type: Sequelize.INTEGER,
+        foreignKey: true,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
       },
-      thumbnail: {
-        type: Sequelize.STRING
-      },
-      price: {
-        type: Sequelize.STRING
-      },
-      kind: {
+      point: {
         type: Sequelize.STRING
       },
       content: {
@@ -41,6 +49,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('menus');
+    await queryInterface.dropTable('reviews');
   }
 };

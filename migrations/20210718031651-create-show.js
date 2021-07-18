@@ -1,39 +1,41 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('reviews', {
+    await queryInterface.createTable('shows', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      board_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'boards',
-          key: 'id'
-        }
+      time: {
+        type: Sequelize.STRING
       },
-      jazzbar_id: {
+      date: {
+        type: Sequelize.STRING
+      },
+      player: {
+        type: Sequelize.STRING
+      },
+      thumbnail: {
+        type: Sequelize.STRING
+      },
+      jazzbarId: {
         type: Sequelize.INTEGER,
+        foreignKey: true,
         references: {
           model: 'jazzbars',
           key: 'id'
         }
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id'
-        }
-      },
-      point: {
-        type: Sequelize.STRING
-      },
       content: {
         type: Sequelize.STRING
+      },
+      showCharge: {
+        type: Sequelize.INTEGER
+      },
+      currentSeat: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -46,6 +48,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('reviews');
+    await queryInterface.dropTable('shows');
   }
 };

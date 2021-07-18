@@ -7,16 +7,16 @@ module.exports = {
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
-    //토큰에서 user_id 추출
-    let user_id = util.getUserId(req, res);
+    //토큰에서 userId 추출
+    let userId = util.getUserId(req, res);
 
     if (!point || !content) {
       res.status(422).send("insufficient parameters supplied");
     }
     else if (!!jazzbarId) {
       await review.create({
-        jazzbar_id: jazzbarId,
-        user_id: user_id,
+        jazzbarId: jazzbarId,
+        userId: userId,
         point: point,
         content: content,
       })
@@ -24,8 +24,8 @@ module.exports = {
     }
     else if (!!boardId) {
       await review.create({
-        board_id: boardId,
-        user_id: user_id,
+        boardId: boardId,
+        userId: userId,
         point: point,
         content: content,
       })
@@ -41,15 +41,15 @@ module.exports = {
     if (jazzbarId) {
       if (userId) {
         let reviewInfo = await review.findOne({
-          where: { jazzbar_id: jazzbarId, user_id: userId }
+          where: { jazzbarId: jazzbarId, userId: userId }
         })
         return res.status(200).send({ data: reviewInfo.dataValues, message: "OK" });
       } else {
         let reviewInfo = await review.findAll({
-          where: { jazzbar_id: jazzbarId }
+          where: { jazzbarId: jazzbarId }
         }).then((data) => {
           data.map((el) => {
-            return { id: el.dataValues.id, board_id: el.dataValues.board_id, jazzbar_id: el.dataValues.jazzbar_id, user_id: el.dataValues.user_id, point: el.dataValues.point, content: el.dataValues.content }
+            return { id: el.dataValues.id, boardId: el.dataValues.boardId, jazzbarId: el.dataValues.jazzbarId, userId: el.dataValues.userId, point: el.dataValues.point, content: el.dataValues.content }
           })
         })
         if (!reviewInfo) {
@@ -61,15 +61,15 @@ module.exports = {
     } else if (boardId) {
       if (userId) {
         let reviewInfo = await review.findOne({
-          where: { board_id: boardId, user_id: userId }
+          where: { boardId: boardId, userId: userId }
         })
         return res.status(200).send({ data: reviewInfo.dataValues, message: "OK" });
       } else {
         let reviewInfo = await review.findAll({
-          where: { board_id: boardId }
+          where: { boardId: boardId }
         }).then((data) => {
           data.map((el) => {
-            return { id: el.dataValues.id, board_id: el.dataValues.board_id, jazzbar_id: el.dataValues.jazzbar_id, user_id: el.dataValues.user_id, point: el.dataValues.point, content: el.dataValues.content }
+            return { id: el.dataValues.id, boardId: el.dataValues.boardId, jazzbarId: el.dataValues.jazzbarId, userId: el.dataValues.userId, point: el.dataValues.point, content: el.dataValues.content }
           })
         })
         if (!reviewInfo) {
@@ -87,8 +87,8 @@ module.exports = {
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
-    //토큰에서 user_id 추출
-    let user_id = util.getUserId(req, res);
+    //토큰에서 userId 추출
+    let userId = util.getUserId(req, res);
 
     if (!point || !content) {
       res.status(404).send("Fill all content");
@@ -99,8 +99,8 @@ module.exports = {
         content: content,
       }, {
         where: {
-          jazzbar_id: jazzbarId,
-          user_id: user_id,
+          jazzbarId: jazzbarId,
+          userId: userId,
         }
       })
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
@@ -111,8 +111,8 @@ module.exports = {
         content: content,
       }, {
         where: {
-          board_id: boardId,
-          user_id: user_id,
+          boardId: boardId,
+          userId: userId,
         }
       })
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })

@@ -12,7 +12,7 @@ module.exports = {
                 where: { content: { [Op.like]: "%" + content + "%" } }
             }).then((data) => {
                 data.map((el) => {
-                    return { id: el.dataValues.id, board_id: el.dataValues.board_id, jazzbar_id: el.dataValues.jazzbar_id, user_id: el.dataValues.user_id, point: el.dataValues.point, content: el.dataValues.content }
+                    return { id: el.dataValues.id, boardId: el.dataValues.boardId, jazzbarId: el.dataValues.jazzbarId, userId: el.dataValues.userId, point: el.dataValues.point, content: el.dataValues.content }
                 })
             })
 
@@ -32,14 +32,14 @@ module.exports = {
                 where: { title: { [Op.like]: "%" + content + "%" } }
             }).then((data) => {
                 data.map((el) => {
-                    return { id: el.dataValues.id, user_id: el.dataValues.user_id, title: el.dataValues.title, content: el.dataValues.content }
+                    return { id: el.dataValues.id, userId: el.dataValues.userId, title: el.dataValues.title, content: el.dataValues.content }
                 })
             })
             let searchContent = await board.findAll({
                 where: { content: { [Op.like]: "%" + content + "%" } }
             }).then((data) => {
                 data.map((el) => {
-                    return { id: el.dataValues.id, user_id: el.dataValues.user_id, title: el.dataValues.title, content: el.dataValues.content }
+                    return { id: el.dataValues.id, userId: el.dataValues.userId, title: el.dataValues.title, content: el.dataValues.content }
                 })
             })
             searchData = [ ...searchTitle, ...searchContent ];
@@ -106,14 +106,14 @@ module.exports = {
                 where: { title: { [Op.like]: "%" + content + "%" } }
             }).then((data) => {
                 data.map((el) => {
-                    return { id: el.dataValues.id, jazzbar_id: el.dataValues.jazzbar_id, time: el.dataValues.time, date: el.dataValues.date, player: el.dataValues.player, thumbnail: el.dataValues.thumbnail, content: el.dataValues.content, showCharge: el.dataValues.showCharge, currentSeat: el.dataValues.currentSeat }
+                    return { id: el.dataValues.id, jazzbarId: el.dataValues.jazzbarId, time: el.dataValues.time, date: el.dataValues.date, player: el.dataValues.player, thumbnail: el.dataValues.thumbnail, content: el.dataValues.content, showCharge: el.dataValues.showCharge, currentSeat: el.dataValues.currentSeat }
                 })
             })
             let searchContent = await show.findAll({
                 where: { content: { [Op.like]: "%" + content + "%" } }
             }).then((data) => {
                 data.map((el) => {
-                    return { id: el.dataValues.id, jazzbar_id: el.dataValues.jazzbar_id, time: el.dataValues.time, date: el.dataValues.date, player: el.dataValues.player, thumbnail: el.dataValues.thumbnail, content: el.dataValues.content, showCharge: el.dataValues.showCharge, currentSeat: el.dataValues.currentSeat }
+                    return { id: el.dataValues.id, jazzbarId: el.dataValues.jazzbarId, time: el.dataValues.time, date: el.dataValues.date, player: el.dataValues.player, thumbnail: el.dataValues.thumbnail, content: el.dataValues.content, showCharge: el.dataValues.showCharge, currentSeat: el.dataValues.currentSeat }
                 })
             })
             searchData = [ ...searchPlayer, ...searchContent]

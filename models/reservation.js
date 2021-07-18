@@ -12,20 +12,20 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.user, {
-        foreignkey : 'user_id',
+        foreignkey : 'userId',
         // targetKey : 'id',
         // as : 'user'
       });
       this.belongsTo(models.show, {
-        foreignkey : 'show_id',
+        foreignkey : 'showId',
         // targetKey : 'id',
         // as : 'show'
       });
     }
   };
   reservation.init({
-    user_id: DataTypes.INTEGER,
-    show_id: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER,
+    showId: DataTypes.INTEGER,
     people: DataTypes.STRING,
     confirm: DataTypes.STRING
   }, {

@@ -21,11 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         // sourceKey : 'id',
         onDelete: "cascade"
       });
-      this.hasOne(models.user, {
-        // foreignKey: 'jazzbar_id',
-        // sourceKey : 'id',
-        onDelete: "cascade"
-      });
       this.hasMany(models.show, {
         // foreignKey: 'jazzbar_id',
         // sourceKey : 'id',

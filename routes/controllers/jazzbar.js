@@ -7,11 +7,11 @@ module.exports = {
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
-    //토큰에서 user_id 추출
-    let user_id = util.getUserId(req, res);
+    //토큰에서 userId 추출
+    let userId = util.getUserId(req, res);
 
     //thumbnail 받아오기
-    let thumbnail = process.env.WEBSITE + '/image/' + req.files.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 
     if (!serviceOption || !address || !barName || !defaultSeat || !area || !gpsX || !gpsY) {
       res.status(404).send("not found");
@@ -29,17 +29,17 @@ module.exports = {
         openTime: openTime
       })
 
-      // jazzbar_id를 usertable에 update.
+      // jazzbarId를 usertable에 update.
       const lastJazzBar = await jazzbar.findAll({
         limit: 1,
         order: "createdAt desc",
       })
-      const jazzbar_id = lastJazzBar[0].dataValues.id;
+      const jazzbarId = lastJazzBar[0].dataValues.id;
       await user.update(
-        { jazzbar_id: jazzbar_id },
+        { jazzbarId: jazzbarId },
         {
           where: {
-            userId: user_id
+            userId: userId
           }
         })
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "created" })
@@ -71,7 +71,7 @@ module.exports = {
     }
   },
   jazzbarUpdate: async (req, res) => {
-    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, rating, jazzbar_id, openTime } = req.body;
+    const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, rating, jazzbarId, openTime } = req.body;
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
@@ -95,15 +95,15 @@ module.exports = {
         openTime: openTime
       }, {
         where: {
-          id: jazzbar_id
+          id: jazzbarId
         }
       })
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
     }
   },
   jazzbarDelete: async (req, res) => {
-    const { jazzbar_id } = req.body;
-    const id = jazzbar_id
+    const { jazzbarId } = req.body;
+    const id = jazzbarId
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 

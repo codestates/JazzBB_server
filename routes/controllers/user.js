@@ -7,11 +7,12 @@ module.exports = {
   userRead: async (req, res) => {
     //토큰 유효성 검사
     let newAccesstoken = await util.getToken(req, res);
-    //토큰에서 user_id 추출
-    let user_id = await util.getUserId(req, res);
+    //토큰에서 userId 추출
+    let userId = await util.getUserId(req, res);
 
     const userInfo = await user.findOne({
-      where: { userId: user_id }
+      // attributes: [`id`, `userId`, `username`, `thumbnail`, `usertype`, `mobile`, `jazzbarId`, `createdAt`, `updatedAt`] ,
+      where: { userId: userId }
     })
 
     if (!userInfo) {
@@ -25,10 +26,10 @@ module.exports = {
     const { username, usertype, mobile } = req.body;
     //토큰 유효성 검사
     let newAccesstoken = await util.getToken(req, res);
-    //토큰에서 user_id 추출
-    let user_id = await util.getUserId(req, res);
+    //토큰에서 userId 추출
+    let userId = await util.getUserId(req, res);
 
-    if (!user_id || !username || !usertype || !mobile || !newAccesstoken) {
+    if (!userId || !username || !usertype || !mobile || !newAccesstoken) {
       res.status(404).send("Fill all content");
     } else {
       await user.update({
@@ -37,7 +38,7 @@ module.exports = {
         usertype: usertype,
       }, {
         where: {
-          userId: user_id
+          userId: userId
         }
       })
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "OK" })
@@ -46,10 +47,10 @@ module.exports = {
   userDelete: async (req, res) => {
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
-    //토큰에서 user_id 추출
-    let user_id = util.getUserId(req, res);
+    //토큰에서 userId 추출
+    let userId = util.getUserId(req, res);
 
-    if (!user_id) {
+    if (!userId) {
       return res.status(404).send("not found");
     } else {
       await user.destroy({

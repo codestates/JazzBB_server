@@ -12,17 +12,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.user, {
-        foreignkey : 'user_id',
+        foreignkey : 'userId',
         // targetKey : 'id',
       });
-      this.belongsTo(models.review, {
-        foreignkey : 'board_id',
-        // targetKey : 'id',
-      });
+      
     }
   };
   board.init({
-    user_id: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER,
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     thumbnail: DataTypes.STRING,

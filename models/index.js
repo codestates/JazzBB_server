@@ -34,14 +34,4 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-
-db.user = require('./user.js')(sequelize, Sequelize);
-db.board = require('./board.js')(sequelize, Sequelize);
-db.jazzbar = require('./jazzbar.js')(sequelize, Sequelize);
-db.menu = require('./menu.js')(sequelize, Sequelize);
-db.reservation = require('./reservation.js')(sequelize, Sequelize);
-db.review = require('./review.js')(sequelize, Sequelize);
-db.show = require('./show.js')(sequelize, Sequelize);
-db.subscribe = require('./subscribe.js')(sequelize, Sequelize);
-
 module.exports = db;

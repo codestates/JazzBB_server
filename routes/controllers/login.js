@@ -5,7 +5,7 @@ const axios = require('axios');
 
 let tokenData = {};
 let userInfo;
-let jazzbar_id;
+let jazzbarId;
 
 module.exports = { 
   login: async (req, res) => {
@@ -43,7 +43,7 @@ module.exports = {
             });
             if (exUser) {
                 userInfo = exUser;
-                jazzbar_id = exUser.jazzbar_id;
+                jazzbarId = exUser.jazzbarId;
                 
             } else {
                 const newUser = await user.create({
@@ -62,7 +62,7 @@ module.exports = {
       httpOnly: true,
     })
     
-    return res.status(200).send({data : { accessToken : tokenData.accessToken, jazzbar_id : jazzbar_id, message : 'ok' }})  
+    return res.status(200).send({data : { accessToken : tokenData.accessToken, jazzbarId : jazzbarId, message : 'ok' }})  
     
   },
   logout: async (req,res) => {
