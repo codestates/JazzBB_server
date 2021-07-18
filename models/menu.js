@@ -12,13 +12,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.jazzbar, {
-        foreignkey : 'jazzbar_id',
+        foreignkey : 'jazzbarId',
         // targetKey : 'id',
       });
     }
   };
   menu.init({
-    jazzbar_id: DataTypes.INTEGER,
+    jazzbarId: DataTypes.INTEGER,
     name: DataTypes.STRING,
     thumbnail: DataTypes.STRING,
     price: DataTypes.STRING,

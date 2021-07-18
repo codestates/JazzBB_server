@@ -9,7 +9,7 @@ cookieParser();
 utilFunctions = {
   getToken: async (req, res) => {
     let token = req.headers.authorization;
-    console.log("******** getToken req: ", req.headers.cookie )
+    console.log("******** 토큰받아라~~ 여기는 유틸함수다~~ : ", req.headers.cookie )
     let refresh_token = req.headers.cookie.replace('refreshToken=', '')
     // accessToken, refreshToken 둘다 따로 지정해야됨//
     let tokenData = {};
@@ -54,7 +54,6 @@ utilFunctions = {
     return result;
   },
   getUserId: async (res, req) => {
-    console.log("******** getUserId req : ", req.req.headers.authorization)
     let token = req.req.headers.authorization;
     let user_id
     await axios({

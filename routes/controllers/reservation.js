@@ -1,11 +1,12 @@
 const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
+// const model = require("../../models");
 const util = require('./utilFunction')
 
 module.exports = {
   reservationCreate: async (req, res) => {
     const { show_id, user_id, people } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken =  await util.getToken(req, res);
 
     if (!show_id || !people || !user_id) {
       res.status(404).send("not found show_id or show_id or people");
@@ -23,31 +24,41 @@ module.exports = {
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
-    const { show_id, user_id } = req.body;
+    // const { show_id, user_id } = req.body;
+    const showId = req.body.show_id
+    const userId = req.body.user_id
+
+
     console.log("******** req:", req.body.user_id)
     // console.log("******** req.headers :", req.headers)
     let reservationInfo;
     let reservationData;
-
-    if (user_id) {
+    
+    if (!!userId) {
       reservationInfo = await reservation.findAll({
-        include: { model: models.user, as : 'user' },
-        where: { user_id: user_id },
+        where: { userId: userId },
+        include: { model: show }
+      })
+      // reservationInfo = await show.findAll({
+      //     // where: { user_id: 1id },
+      //     include: { model: reservation }
+      //   })
+      console.log('******** reservationInfo : ',reservationInfo[0].dataValues);
+      reservationData = reservationInfo.map((el) => {
+        return { id: el.dataValues.id, show_id: el.dataValues.show_id, user_id: el.dataValues.user_id, people: el.dataValues.people, confirm: el.dataValues.confirm }
+      })
+      // console.log('******** reservationData : ', reservationData);
+    } else if (show_id) {
+      reservationInfo = await reservation.findAll({
+        include: { model: user, as: 'user' },
+        where: { show_id: show_id },
       })
       reservationData = reservationInfo.map((el) => {
         return { id: el.dataValues.id, show_id: el.dataValues.show_id, user_id: el.dataValues.user_id, people: el.dataValues.people, confirm: el.dataValues.confirm, user: el.dataValues.user, }
       });
-    } else if (show_id) {
-      reservationInfo = await reservation.findAll({
-        include: { model: show, as: 'show' },
-        where: { show_id: show_id },
-      })
-      reservationData = reservationInfo.map((el) => {
-        return { id: el.dataValues.id, show_id: el.dataValues.show_id, user_id: el.dataValues.user_id, people: el.dataValues.people, confirm: el.dataValues.confirm, show: el.dataValues.show, }
-      });
     }
-    console.log("******** reservationData :", reservationInfo)
-    console.log("******** reservationData :", reservationData)
+    // console.log("******** reservationData :", reservationInfo)
+    // console.log("******** reservationData :", reservationData)
     if (!reservationData) {
       return res.status(404).send("not found");
     }

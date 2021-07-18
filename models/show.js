@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.jazzbar, {
-        foreignkey : 'jazzbar_id',
+        foreignkey : 'jazzbarId',
         // targetKey : 'id',
       });
       this.hasMany(models.reservation, {
-        // foreignKey: 'show_id',
+        foreignKey: 'showId',
         // sourceKey : 'id',
         onDelete: "cascade"
       });
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     date: DataTypes.STRING,
     player: DataTypes.STRING,
     thumbnail: DataTypes.STRING,
-    jazzbar_id: DataTypes.INTEGER,
+    jazzbarId: DataTypes.INTEGER,
     content: DataTypes.STRING,
     showCharge: DataTypes.STRING,
     currentSeat : DataTypes.STRING,
