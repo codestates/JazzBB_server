@@ -5,7 +5,7 @@ module.exports = {
   reviewCreate: async (req, res) => {
     const { jazzbarId, boardId, point, content } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken =  await util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
 
     //토큰에서 userId 추출
     let userId = await util.getUserId(req, res);
@@ -37,55 +37,77 @@ module.exports = {
   },
   reviewRead: async (req, res) => {
     const { jazzbarId, boardId, userId } = req.body;
+    console.log("***********reviewRead :", req.body)
+
+
+
+
 
     if (jazzbarId) {
-      if (userId) {
-        let reviewInfo = await review.findOne({
-          where: { jazzbarId: jazzbarId, userId: userId }
+      let reviewInfo = await review.findAll({
+        where: { jazzbarId: jazzbarId },
+        include: { model: user }
+      }).then((data) => {
+        return data.map((el) => {
+          return { id: el.dataValues.id, boardId: el.dataValues.boardId, jazzbarId: el.dataValues.jazzbarId, userId: el.dataValues.userId, point: el.dataValues.point, content: el.dataValues.content, user: el.dataValues.user.dataValues }
         })
-        return res.status(200).send({ data: reviewInfo.dataValues, message: "OK" });
+      })
+      if (!reviewInfo) {
+        return res.status(404).send("not found reviewInfo");
       } else {
-        let reviewInfo = await review.findAll({
-          where: { jazzbarId: jazzbarId }
-        }).then((data) => {
-          data.map((el) => {
-            return { id: el.dataValues.id, boardId: el.dataValues.boardId, jazzbarId: el.dataValues.jazzbarId, userId: el.dataValues.userId, point: el.dataValues.point, content: el.dataValues.content }
-          })
-        })
-        if (!reviewInfo) {
-          return res.status(404).send("not found reviewInfo");
-        } else {
-          return res.status(200).send({ data: { list: reviewInfo }, message: "OK" });
-        }
+        return res.status(200).send({ data: { list: reviewInfo }, message: "OK" });
       }
-    } else if (boardId) {
-      if (userId) {
-        let reviewInfo = await review.findOne({
-          where: { boardId: boardId, userId: userId }
+    }
+    else if (boardId) {
+      let reviewInfo = await review.findAll({
+        where: { boardId: boardId }
+      }).then((data) => {
+        return data.map(async (el) => {
+          let userInfo = await user.findOne({
+            where: { id: el.dataValues.userId }
+          }).then(el => el.dataValues)
+          return { id: el.dataValues.id, boardId: el.dataValues.boardId, jazzbarId: el.dataValues.jazzbarId, userId: el.dataValues.userId, point: el.dataValues.point, content: el.dataValues.content, user: userInfo }
         })
-        return res.status(200).send({ data: reviewInfo.dataValues, message: "OK" });
+      })
+      if (!reviewInfo) {
+        return res.status(404).send("not found reviewInfo");
       } else {
-        let reviewInfo = await review.findAll({
-          where: { boardId: boardId }
-        }).then((data) => {
-          data.map((el) => {
-            return { id: el.dataValues.id, boardId: el.dataValues.boardId, jazzbarId: el.dataValues.jazzbarId, userId: el.dataValues.userId, point: el.dataValues.point, content: el.dataValues.content }
-          })
-        })
-        if (!reviewInfo) {
-          return res.status(404).send("not found reviewInfo");
-        } else {
-          return res.status(200).send({ data: { list: reviewInfo }, message: "OK" });
-        }
+        return res.status(200).send({ data: { list: reviewInfo }, message: "OK" });
       }
     } else {
-      return res.status(404).send("something is wrong. check your code!!")
+
+      let reviewInfo = await review.findAll({
+        where: { userId: userId },
+        include: [{ model: jazzbar }, { model: user, include: { model: board } }]
+      })
+      // reviewinfo = [{0}, {1}] => reveiwData = [{und}, {1}]
+      let reviewData = await reviewInfo.map((el) => {
+        if(el.dataValues.jazzbarId){
+          return  {
+            id: el.dataValues.id,
+            boardId: el.dataValues.boardId,
+            jazzbarId: el.dataValues.jazzbarId,
+            userId: el.dataValues.userId,
+            point: el.dataValues.point,
+            content: el.dataValues.content,
+            jazzbar: el.dataValues.jazzbar.dataValues,
+          }
+        }
+          })
+        
+      await console.log("******** reviewInfo 2: ",  reviewInfo);
+      await console.log("******** reviewInfo 3: ", reviewData);
+      if (!reviewInfo) {
+        return res.status(404).send("not found reviewInfo");
+      } else {
+        return res.status(200).send({ data: { list: reviewData }, message: "OK" });
+      }
     }
   },
   reviewUpdate: async (req, res) => {
     const { jazzbarId, boardId, point, content } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken =  await util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
 
     //토큰에서 userId 추출
     let userId = await util.getUserId(req, res);
@@ -123,7 +145,7 @@ module.exports = {
   reviewDelete: async (req, res) => {
     const { id } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken =  await util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
 
     if (!id || !newAccesstoken) {
       return res.status(404).send("not found or Can't find token");
