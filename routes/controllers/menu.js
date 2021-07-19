@@ -39,13 +39,14 @@ module.exports = {
       where: { jazzbarId: jazzbarId }
     })
     let menuData = menuInfo.map((el) => {
+      console.log(el,'sdflshflksdnslkncs;dsnclksncsdkln')
       return { id: el.dataValues.id, name: el.dataValues.name, thumbnail: el.dataValues.thumbnail, price: el.dataValues.price, kind: el.dataValues.kind, content: el.dataValues.content }
     });
 
     if (!menuInfo) {
       return res.status(404).send("not found");
     } else {
-      return res.status(200).send({ data: { data: menuData, accessToken: newAccesstoken }, message: "OK" });
+      return res.status(200).send({ data: { data: menuData }, message: "OK" });
     }
   },
   menuUpdate: async (req, res) => {
