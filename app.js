@@ -71,14 +71,14 @@ app.use(
 
 // sequelize 연동
 const models = require('./models');
-models.sequelize.sync()
-// models.sequelize.sync({force : false})
-  .then(()=> {
-    console.log('Connet Database')
-  })
-  .catch((err) =>{
-    console.log(err)
-  })
+// models.sequelize.sync()
+// // models.sequelize.sync({force : false})
+//   .then(()=> {
+//     console.log('Connet Database')
+//   })
+//   .catch((err) =>{
+//     console.log(err)
+//   })
 
 // passportConfig();
 
@@ -111,7 +111,7 @@ app.post('/jazzbarDelete', indexRouter.jazzbar.jazzbarDelete)
 
 //5. show
 app.post('/showCreate', upload.single('thumbnail'), indexRouter.show.showCreate)
-app.get('/showRead', indexRouter.show.showRead)
+app.post('/showRead', indexRouter.show.showRead)
 app.post('/showUpdate', upload.single('thumbnail'), indexRouter.show.showUpdate)
 app.post('/showDelete', indexRouter.show.showDelete)
 
@@ -123,16 +123,16 @@ app.post('/reservationDelete', indexRouter.reservation.reservationDelete)
 
 //7. menu
 app.post('/menuCreate', upload.array('thumbnail'), indexRouter.menu.menuCreate)
-app.get('/menuRead', indexRouter.menu.menuRead)
+app.post('/menuRead', indexRouter.menu.menuRead)
 app.post('/menuUpdate', upload.array('thumbnail'), indexRouter.menu.menuUpdate)
 app.post('/menuDelete', indexRouter.menu.menuDelete)
 
 //8. search
-app.get('/searchReview', indexRouter.search.searchReview)
-app.get('/searchBoard', indexRouter.search.searchBoard)
-app.get('/searchJazzbar', indexRouter.search.searchJazzbar)
-app.get('/searchShow', indexRouter.search.searchShow)
-app.get('/searchMenu', indexRouter.search.searchMenu)
+app.post('/searchReview', indexRouter.search.searchReview)
+app.post('/searchBoard', indexRouter.search.searchBoard)
+app.post('/searchJazzbar', indexRouter.search.searchJazzbar)
+app.post('/searchShow', indexRouter.search.searchShow)
+app.post('/searchMenu', indexRouter.search.searchMenu)
 
 
 // app.post('/oauth', indexRouter.oauth); // 오앗!!!

@@ -42,25 +42,11 @@ module.exports = {
   jazzbarRead: async (req, res) => {
     jazzbarInfo = await jazzbar.findAll()
     jazzbarData = jazzbarInfo.map((el) => {
-      return {
-        id: el.dataValues.id,
-        barName: el.dataValues.barName,
-        mobile: el.dataValues.mobile,
-        defaultSeat: el.dataValues.defaultSeat,
-        area: el.dataValues.area,
-        thumbnail: el.dataValues.thumbnail,
-        address: el.dataValues.address,
-        rating: el.dataValues.rating,
-        serviceOption: el.dataValues.serviceOption,
-        openTime: el.dataValues.openTime,
-        gpsX: el.dataValues.gpsX,
-        gpsY: el.dataValues.gpsY,
-      }
+      return el.dataValues;
     });
     if (!jazzbarInfo) {
       return res.status(404).send("not found");
     } else {
-      console.log("****** jazzbar.js jazzbarData: ", jazzbarData)
       return res.status(200).send({ data: jazzbarData, message: "OK" })
     }
   },

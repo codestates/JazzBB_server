@@ -27,8 +27,8 @@ module.exports = {
   },
   boardRead: async (req, res) => {
     const { id } = req.body;
-    let boardInfo;
-    let boardData;
+    let boardInfo = false;
+    let boardData = false;
     if (!!id) {
       boardInfo = await board.findOne({
         where: { id: id }
@@ -37,7 +37,7 @@ module.exports = {
     else if (!id) {
       boardInfo = await board.findAll()
       boardData = boardInfo.map((el) => {
-        return { id: el.dataValues.id, userId: el.dataValues.userId, title: el.dataValues.title, content: el.dataValues.content, thumbnail: el.dataValues.thumbnail }
+        return el.dataValues;
       });
     }
 
