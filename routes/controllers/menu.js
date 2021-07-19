@@ -8,12 +8,14 @@ module.exports = {
     //토큰 유효성 검사
     let newAccesstoken =  await util.getToken(req, res);
 
-    console.log("******** req.files: ", req.files);
     
     if(!newAccesstoken){
       return res.status(404).send("not found Accesstoken");
     }
-    console.log("******** jazzId : ", req.body)
+    
+    
+    console.log("******** req.files: ", req.files);
+    console.log("******** req.body : ", req.body)
     console.log("******** jazzId : ", jazzbarId)
     let jazzId = Number(jazzbarId)
     console.log("******** jazzId : ", jazzId)
@@ -22,11 +24,10 @@ module.exports = {
     } else {
       const promise = await Promise.all(req.files.map(data => menu.create(
         { 
-         
+         jazzbarId : jazzId,
          thumbnail: process.env.WEBSITE + '/image' + data.filename
         }
       )))
-      console.log('******** : ', promise)
 
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "created" })
     }

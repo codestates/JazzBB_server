@@ -28,8 +28,6 @@ module.exports = {
     const showId = req.body.showId
     const userId = req.body.userId
 
-
-    console.log("******** req:", req.body.userId)
     // console.log("******** req.headers :", req.headers)
     let reservationInfo;
     let reservationData;
@@ -37,30 +35,27 @@ module.exports = {
     if (!!userId) {
       reservationInfo = await reservation.findAll({
         where: { userId: userId },
-        include: { model: show }
+        include: { model: show , include : { model : jazzbar} }
       })
 
-      console.log('******** reservationInfo : ',reservationInfo);
       reservationData = reservationInfo.map((el) => {
-        return { id: el.dataValues.id, showId: el.dataValues.showId, userId: el.dataValues.userId, people: el.dataValues.people, confirm: el.dataValues.confirm }
+        return { id: el.dataValues.id, showId: el.dataValues.showId, userId: el.dataValues.userId, people: el.dataValues.people, confirm: el.dataValues.confirm, show: el.dataValues.show.dataValues }
       })
-      // console.log('******** reservationData : ', reservationData);
     } else if (showId) {
       reservationInfo = await reservation.findAll({
-        include: { model: user, as: 'user' },
+        include: { model: user },
         where: { showId: showId },
       })
       reservationData = reservationInfo.map((el) => {
-        return { id: el.dataValues.id, showId: el.dataValues.showId, userId: el.dataValues.userId, people: el.dataValues.people, confirm: el.dataValues.confirm, user: el.dataValues.user, }
+        return { id: el.dataValues.id, showId: el.dataValues.showId, userId: el.dataValues.userId, people: el.dataValues.people, confirm: el.dataValues.confirm, user: el.dataValues.user.dataValues }
       });
     }
-    // console.log("******** reservationData :", reservationInfo)
-    // console.log("******** reservationData :", reservationData)
     if (!reservationData) {
       return res.status(404).send("not found");
     }
     else if (reservationData) {
-      return res.status(200).send({ data: { data: reservationData, accessToken: newAccesstoken }, message: "OK" });
+
+      return res.status(200).send({ data: { list: reservationData, accessToken: newAccesstoken }, message: "OK" });
     }
   },
   reservationUpdate: async (req, res) => {

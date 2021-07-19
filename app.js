@@ -27,19 +27,27 @@ const storage = multer.diskStorage({
   cb(null, 'uploads/')
   },
   filename: function (req, file, cb) {
-  const ext = path.extname(file.originalname);
-  cb(null, path.basename(file.originalname, ext)+ Date.now() + ext);
+    let fileFormat = file.mimetype.split('/');
+    callback(null, Date.now() + '.' + fileFormat[fileFormat.length - 1]);
+  // const ext = path.extname(file.originalname);
+  // cb(null, path.basename(file.originalname, ext)+ Date.now() + ext);
   },
 })
 const imageFilter = (req, file, cb) => {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-  return cb(new Error("Only image files are allowed!"));
+  if(file.mimetype.substring(0, 'image'.length) == 'image'){
+    cb(null, true);
+  }else{
+    cb(null, false);
   }
-  cb(null, true);
+  // if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+  // return cb(new Error("Only image files are allowed!"));
+  
+  // }
+  // cb(null, true);
 };
 
 // const upload = multer({storage : storage, limits : { filesize : 5 * 1024 * 1024 }, fileFilter: imageFilter })
-const upload = multer({storage : storage}) ;
+const upload = multer({storage : storage, fileFilter: imageFilter });
 app.use('/image',express.static('./uploads'));
 
 
@@ -85,7 +93,7 @@ app.post('/withdraw', indexRouter.user.userDelete)
 
 //2.Review
 app.post('/reviewCreate', indexRouter.review.reviewCreate)
-app.get('/reviewRead', indexRouter.review.reviewRead)
+app.post('/reviewRead', indexRouter.review.reviewRead)
 app.post('/reviewUpdate', indexRouter.review.reviewUpdate)
 app.post('/reviewDelete', indexRouter.review.reviewDelete)
 
