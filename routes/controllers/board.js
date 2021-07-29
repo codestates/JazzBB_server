@@ -1,5 +1,5 @@
 const util = require('./utilFunction')
-const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
+const { board } = require("../../models");
 
 module.exports = {
   boardCreate: async (req, res) => {
