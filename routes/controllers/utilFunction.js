@@ -1,4 +1,3 @@
-const express = require('express');
 require('dotenv').config();
 const axios = require('axios');
 const cookieParser = require('cookie-parser')
@@ -9,7 +8,6 @@ cookieParser();
 utilFunctions = {
   getToken: async (req, res) => {
     let token = req.headers.authorization;
-    console.log("******** 토큰받아라~~ 여기는 유틸함수다~~ : ", req.headers.cookie )
     let refresh_token = req.headers.cookie.replace('refreshToken=', '')
     // accessToken, refreshToken 둘다 따로 지정해야됨//
     let tokenData = {};
@@ -51,6 +49,7 @@ utilFunctions = {
           return result = tokenData.accessToken;
         }
       })
+      
     return result;
   },
   getUserId: async (res, req) => {

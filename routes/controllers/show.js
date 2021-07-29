@@ -1,22 +1,18 @@
-const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
+const { jazzbar, show } = require("../../models");
 const util = require('./utilFunction');
 
 module.exports = {
   showCreate: async (req, res) => {
-    
-    const { jazzbarId, time, date, player, content, showCharge } = req.body;
     //토큰 유효성 검사
     let newAccesstoken =  await util.getToken(req, res);
-    
-    const currentSeat = await jazzbar.findOne({
-      where: { id: 'jazzbarId' },
+    const { jazzbarId, time, date, player, content, showCharge } = req.body;
+    const seatData = await jazzbar.findOne({
+      where: { id: jazzbarId },
       attributes: ['defaultSeat']
     });
-    
+    const currentSeat = seatData.dataValues.defaultSeat
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
-    console.log("******** req.file: ", thumbnail);
-
 
     if (!time || !date || !content || !showCharge) {
       res.status(422).send("insufficient parameters supplied");

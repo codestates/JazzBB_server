@@ -49,9 +49,7 @@ module.exports = {
     },
     searchJazzbar: async (req, res) => {
         const { content } = req.body;
-        console.log(content)
         let searchData = [];
-
         if (!content) {
             return res.status(404).send("Not found");
         } else {
@@ -63,7 +61,6 @@ module.exports = {
                 })
             })
             .catch((err) => [])
-            // console.log(searchBarName,"dsdlknaslnfklascknsalcn")
             let searchAddress = await jazzbar.findAll({
                 where: { address: { [Op.like]: "%" + content + "%" } }
             }).then((barArr) => {
@@ -72,9 +69,7 @@ module.exports = {
                 })
             })
             .catch((err) => [])
-
             searchData = [...searchBarName, ...searchAddress];
-            // console.log(searchData,'sdsdadadasdsad')
             return res.status(200).send({ data: searchData, message: "OK" });
         }
     },
