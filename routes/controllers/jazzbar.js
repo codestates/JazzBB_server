@@ -54,7 +54,7 @@ module.exports = {
   jazzbarUpdate: async (req, res) => {
     const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, rating, jazzbarId, openTime } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
     if (!newAccesstoken) {
       return res.status(404).send("not found Accesstoken");
     }
@@ -106,7 +106,7 @@ module.exports = {
     const { jazzbarId } = req.body;
     const id = jazzbarId
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
 
     if (!id) {
       return res.status(404).send("Not found");
