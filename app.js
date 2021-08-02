@@ -23,28 +23,28 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     // const ext = path.extname(file.originalname);
-    const ext = file.mimetype.split("/")[1];
-    cb(null, Date.now() + "." + ext);
+    // const ext = file.mimetype.split("/")[1];
+    // cb(null, Date.now() + "." + ext);
 
-  // const ext = path.extname(file.originalname);
-  // cb(null, path.basename(file.originalname, ext)+ Date.now() + ext);
+  const ext = path.extname(file.originalname);
+  cb(null, path.basename(file.originalname, ext)+ Date.now() + ext);
   },
 })
 const imageFilter = (req, file, cb) => {
-  if(file.mimetype.substring(0, 'image'.length) == 'image'){
-    cb(null, true);
-  }else{
-    cb(null, false);
-  }
-  // if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-  // return cb(new Error("Only image files are allowed!"));
+  // if(file.mimetype.substring(0, 'image'.length) == 'image'){
+  //   cb(null, true);
+  // }else{
+  //   cb(null, false);
   // }
-  // cb(null, true);
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+  return cb(new Error("Only image files are allowed!"));
+  }
+  cb(null, true);
 };
 
 // const upload = multer({storage : storage, limits : { filesize : 5 * 1024 * 1024 }, fileFilter: imageFilter })
-// const upload = multer({storage : storage, fileFilter: imageFilter });
-const upload = multer({storage : storage });
+const upload = multer({storage : storage, fileFilter: imageFilter });
+// const upload = multer({storage : storage });
 app.use('/image',express.static('./uploads'));
 
 app.set('views', path.join(__dirname, 'views'));

@@ -47,7 +47,7 @@ utilFunctions = {
               tokenData.accessToken = data.data.access_token;
 
             })
-            console.log("토큰요청회신 완료 :", result)
+          await console.log("토큰요청회신 완료 :")
           return result = tokenData.accessToken;
         }
       })

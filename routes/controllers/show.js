@@ -94,7 +94,7 @@ module.exports = {
   showDelete: async (req, res) => {
     const { id, jazzbarId } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
 
     if (!id || !jazzbarId || !newAccesstoken) {
       return res.status(404).send("not found");
