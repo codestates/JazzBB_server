@@ -48,12 +48,13 @@ module.exports = {
       return res.status(404).send("not found Accesstoken");
     }
 
-    //thumbnail 받아오기
-    let thumbnail = process.env.WEBSITE + '/image/' + req.files.filename;
+    if (!name || !price || !kind || !content) {
+      res.status(404).send("Fill all content OR token");
+    } 
 
-    if (!thumbnail) {
-      res.status(404).send("not found content!");
-    } else {
+    if(req.file){
+      //thumbnail 받아오기
+      let thumbnail = process.env.WEBSITE + '/image/' + req.files.filename;
       await menu.update({
         name: name,
         price: price,
@@ -65,8 +66,19 @@ module.exports = {
           id: id,
         }
       })
-      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
+    } else {
+      await menu.update({
+        name: name,
+        price: price,
+        kind: kind,
+        content: content,
+      }, {
+        where: {
+          id: id,
+        }
+      })
     }
+      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
   },
   menuDelete: async (req, res) => {
     const { id } = req.body;

@@ -55,13 +55,16 @@ module.exports = {
     const { serviceOption, address, barName, defaultSeat, area, gpsX, gpsY, mobile, rating, jazzbarId, openTime } = req.body;
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
-
-    //thumbnail 받아오기
-    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
-
+    if (!newAccesstoken) {
+      return res.status(404).send("not found Accesstoken");
+    }
     if (!serviceOption || !address || !barName || !defaultSeat || !area || !gpsX || !gpsY) {
       res.status(404).send("not found");
-    } else {
+    }
+
+    if(req.file){
+      //thumbnail 받아오기
+      let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
       await jazzbar.update({
         serviceOption: serviceOption,
         address: address,
@@ -79,8 +82,25 @@ module.exports = {
           id: jazzbarId
         }
       })
-      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
+    } else {
+      await jazzbar.update({
+        serviceOption: serviceOption,
+        address: address,
+        barName: barName,
+        defaultSeat: defaultSeat,
+        area: area,
+        gpsX: gpsX,
+        gpsY: gpsY,
+        mobile: mobile,
+        rating: rating,
+        openTime: openTime
+      }, {
+        where: {
+          id: jazzbarId
+        }
+      })
     }
+      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
   },
   jazzbarDelete: async (req, res) => {
     const { jazzbarId } = req.body;
