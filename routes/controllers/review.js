@@ -81,6 +81,7 @@ module.exports = {
             userId: el.dataValues.userId,
             point: el.dataValues.point,
             content: el.dataValues.content,
+            createdAt : el.dataValues.createdAt,
             jazzbar: el.dataValues.jazzbar.dataValues,
           }
         }
