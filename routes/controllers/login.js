@@ -61,6 +61,8 @@ module.exports = {
     await res.cookie("refreshToken", tokenData.refresh_token, {
       httpOnly: true,
     })
+
+    // await console.log(res, '@@@@@@@@@@@@@@@@@@@@s')
     
     return res.status(200).send({data : { accessToken : tokenData.accessToken, jazzbarId : jazzbarId, message : 'ok' }})  
     

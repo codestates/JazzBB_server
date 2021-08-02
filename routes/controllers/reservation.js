@@ -15,7 +15,7 @@ module.exports = {
         showId: showId,
         userId: userId,
         people: people,
-        confirm: pending,
+        confirm: 'pending',
       })
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "created" })
     }
