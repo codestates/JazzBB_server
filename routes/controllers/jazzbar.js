@@ -1,4 +1,4 @@
-const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
+const { jazzbar, user } = require("../../models");
 const util = require('./utilFunction');
 
 module.exports = {
@@ -11,7 +11,8 @@ module.exports = {
     let userId = await util.getUserId(req, res);
     
     //thumbnail 받아오기
-    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
+    // let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
+    let thumbnail = process.env.WEBSITE + '/image/' + req.file.mimetype.split('/')
 
     if ( !address || !barName || !defaultSeat || !area) {
       res.status(404).send("not found");

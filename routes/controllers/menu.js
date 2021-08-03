@@ -1,34 +1,26 @@
-const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
+const { menu } = require("../../models");
 const util = require('./utilFunction')
 
 module.exports = {
   menuCreate: async (req, res) => {
     const { jazzbarId } = req.body;
-
+    console.log('********', req.body)
     //토큰 유효성 검사
-    let newAccesstoken =  await util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
 
-    
-    if(!newAccesstoken){
+    if (!newAccesstoken) {
       return res.status(404).send("not found Accesstoken");
     }
-    
-    
-    console.log("******** req.files: ", req.files);
-    console.log("******** req.body : ", req.body)
-    console.log("******** jazzId : ", jazzbarId)
     let jazzId = Number(jazzbarId)
-    console.log("******** jazzId : ", jazzId)
     if (!jazzbarId) {
       res.status(404).send("not found");
     } else {
       const promise = await Promise.all(req.files.map(data => menu.create(
-        { 
-         jazzbarId : jazzId,
-         thumbnail: process.env.WEBSITE + '/image' + data.filename
+        {
+          jazzbarId: jazzId,
+          thumbnail: process.env.WEBSITE + '/image' + data.filename
         }
       )))
-
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "created" })
     }
   },
@@ -39,7 +31,6 @@ module.exports = {
       where: { jazzbarId: jazzbarId }
     })
     let menuData = menuInfo.map((el) => {
-      console.log(el,'sdflshflksdnslkncs;dsnclksncsdkln')
       return { id: el.dataValues.id, name: el.dataValues.name, thumbnail: el.dataValues.thumbnail, price: el.dataValues.price, kind: el.dataValues.kind, content: el.dataValues.content }
     });
 
@@ -52,15 +43,15 @@ module.exports = {
   menuUpdate: async (req, res) => {
     const { name, price, kind, content } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken =  await util.getToken(req, res);
-    if(!newAccesstoken){
+    let newAccesstoken = await util.getToken(req, res);
+    if (!newAccesstoken) {
       return res.status(404).send("not found Accesstoken");
     }
 
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.files.filename;
 
-    if (!name || !price || !kind || !content || !thumbnail) {
+    if (!thumbnail) {
       res.status(404).send("not found content!");
     } else {
       await menu.update({
@@ -74,14 +65,14 @@ module.exports = {
           id: id,
         }
       })
-      return res.status(200).send({data : { accessToken : newAccesstoken }, message : "Updated"})
+      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
     }
   },
   menuDelete: async (req, res) => {
     const { id } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken =  await util.getToken(req, res);
-    if(!newAccesstoken){
+    let newAccesstoken = await util.getToken(req, res);
+    if (!newAccesstoken) {
       return res.status(404).send("not found Accesstoken");
     }
 
@@ -93,7 +84,7 @@ module.exports = {
           id: id,
         }
       });
-      return res.status(201).send({data : { accessToken : newAccesstoken }, message : "Deleted"});
+      return res.status(201).send({ data: { accessToken: newAccesstoken }, message: "Deleted" });
     }
   },
 };

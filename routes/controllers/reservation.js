@@ -1,5 +1,4 @@
-const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
-// const model = require("../../models");
+const { jazzbar, reservation, show, user } = require("../../models");
 const util = require('./utilFunction')
 
 module.exports = {
@@ -24,11 +23,9 @@ module.exports = {
     //토큰 유효성 검사
     let newAccesstoken = util.getToken(req, res);
 
-    // const { showId, userId } = req.body;
     const showId = req.body.showId
     const userId = req.body.userId
 
-    // console.log("******** req.headers :", req.headers)
     let reservationInfo;
     let reservationData;
     
@@ -65,17 +62,12 @@ module.exports = {
     if (!newAccesstoken) {
       return res.status(404).send("not found");
     }
-
-    //토큰에서 userId 추출 => userInfo 조회
     let userId = util.getUserId(req, res);
     const userInfo = await user.findOne({
       where: { userId: userId }
     })
-
-    //usertable에서 usertype 추출하기
     let usertype = userInfo.usertype;
     let jazzbarId = userInfo.jazzbarId;
-
     if (usertype === 'boss') {
       await reservation.update({
         confirm: confirm,
@@ -84,30 +76,16 @@ module.exports = {
           id: id,
         }
       })
-
       const defaultSeat = await jazzbar.findOne({
         where: { id: jazzbarId },
         attributes: ['defaultSeat']
       });
       const reservationPeople = await reservation.sum('people', { where: { confirm: confirm, showId: showId } });
       const currentSeat = defaultSeat - reservationPeople;
-      await show.update({
-        currentSeat: currentSeat
-      }, {
-        where: {
-          id: showId
-        }
-      });
-
+      await show.update({currentSeat: currentSeat}, {where: {id: showId}});
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated confirm state!" })
     } else {
-      await reservation.update({
-        people: people,
-      }, {
-        where: {
-          id: id,
-        }
-      })
+      await reservation.update({people: people}, {where: {id: id}})
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
     }
   },
@@ -119,14 +97,8 @@ module.exports = {
     if (!id || !newAccesstoken) {
       return res.status(404).send("Not found");
     } else {
-      await reservation.destroy({
-        where: {
-          id: id,
-        }
-      });
+      await reservation.destroy({where: {id: id}});
       return res.status(201).send({ data: { accessToken: newAccesstoken }, message: "Deleted" });
     }
-
   },
-
 };

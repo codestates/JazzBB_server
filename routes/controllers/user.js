@@ -1,6 +1,6 @@
 const util = require('./utilFunction');
 require("dotenv").config();
-const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
+const { user } = require("../../models");
 
 
 module.exports = {
@@ -11,7 +11,6 @@ module.exports = {
     let userId = await util.getUserId(req, res);
 
     const userInfo = await user.findOne({
-      // attributes: [`id`, `userId`, `username`, `thumbnail`, `usertype`, `mobile`, `jazzbarId`, `createdAt`, `updatedAt`] ,
       where: { userId: userId }
     })
 

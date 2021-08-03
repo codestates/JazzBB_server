@@ -1,4 +1,4 @@
-const { board, review, menu, subscribe, jazzbar, reservation, show, user } = require("../../models");
+const { board, review, jazzbar, user } = require("../../models");
 const util = require('./utilFunction');
 
 module.exports = {
@@ -10,7 +10,6 @@ module.exports = {
     //토큰에서 userId 추출
     let userId = await util.getUserId(req, res);
     const userinfo = await user.findOne({where: {userId: userId}}).then(el => el.dataValues)
-    console.log(userinfo,"@@@@@@@@@@@@@@@@")
     if (!point || !content) {
       res.status(422).send("insufficient parameters supplied");
     }
@@ -34,16 +33,10 @@ module.exports = {
     } else {
       return res.status(404).send("something is wrong. check your code!!")
     }
-
   },
+
   reviewRead: async (req, res) => {
     const { jazzbarId, boardId, userId } = req.body;
-    console.log("***********reviewRead :", req.body)
-
-
-
-
-
     if (jazzbarId) {
       let reviewInfo = await review.findAll({
         where: { jazzbarId: jazzbarId },
@@ -71,7 +64,6 @@ module.exports = {
       if (!reviewInfo) {
         return res.status(404).send("not found reviewInfo");
       } else {
-        console.log(reviewInfo);
         return res.status(200).send({ data: reviewInfo, message: "OK" });
       }
     } else {
@@ -80,7 +72,6 @@ module.exports = {
         where: { userId: userId },
         include: [{ model: jazzbar }, { model: user, include: { model: board } }]
       })
-      // reviewinfo = [{0}, {1}] => reveiwData = [{und}, {1}]
       let reviewData = await reviewInfo.map((el) => {
         if(el.dataValues.jazzbarId){
           return  {
@@ -94,9 +85,6 @@ module.exports = {
           }
         }
           })
-        
-      await console.log("******** reviewInfo 2: ",  reviewInfo);
-      await console.log("******** reviewInfo 3: ", reviewData);
       if (!reviewInfo) {
         return res.status(404).send("not found reviewInfo");
       } else {
@@ -158,5 +146,4 @@ module.exports = {
       return res.status(201).send({ data: { accessToken: newAccesstoken }, message: "Deleted" });
     }
   },
-
 };

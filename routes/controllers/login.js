@@ -1,4 +1,3 @@
-// const User = require('../../models/user');
 const { user } = require("../../models");
 require('dotenv').config();
 const axios = require('axios');
