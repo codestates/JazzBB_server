@@ -50,13 +50,17 @@ module.exports = {
     const { id, jazzbarId, time, date, player, content, showCharge } = req.body;
     //토큰 유효성 검사
     let newAccesstoken =  await util.getToken(req, res);
-
-    //thumbnail 받아오기
-    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
+    if (!newAccesstoken) {
+      return res.status(404).send("not found Accesstoken");
+    }
 
     if (!time || !date || !player || !content || !showCharge) {
-      res.status(404).send("Fill all content");
-    } else {
+      res.status(404).send("Fill all content OR token");
+    } 
+    console.log(req.file)
+    if(req.file){
+      //thumbnail 받아오기
+      let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
       await show.update({
         time: time,
         date: date,
@@ -70,14 +74,27 @@ module.exports = {
           jazzbarId: jazzbarId
         }
       })
-      return res.status(200).send({data : { accessToken : newAccesstoken }, message : "Updated"})
+    } else {
+      await show.update({
+        time: time,
+        date: date,
+        player: player,
+        content: content,
+        showCharge: showCharge,
+      }, {
+        where: {
+          id: id,
+          jazzbarId: jazzbarId
+        }
+      })
     }
+  return res.status(200).send({data : { accessToken : newAccesstoken }, message : "Updated"})
 
   },
   showDelete: async (req, res) => {
     const { id, jazzbarId } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
 
     if (!id || !jazzbarId || !newAccesstoken) {
       return res.status(404).send("not found");

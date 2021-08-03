@@ -7,6 +7,7 @@ cookieParser();
 //토큰유효성 검사 => 현재 토큰이 유효한지 확인하고 토큰이 만료되었으면 재발급 받아야함. 재발급은 리프레시토큰으로 받아와야함.
 utilFunctions = {
   getToken: async (req, res) => {
+    console.log("토큰요청중...");
     let token = req.headers.authorization;
     let refresh_token = req.headers.cookie.replace('refreshToken=', '')
     // accessToken, refreshToken 둘다 따로 지정해야됨//
@@ -46,6 +47,7 @@ utilFunctions = {
               tokenData.accessToken = data.data.access_token;
 
             })
+          await console.log("토큰요청회신 완료 :")
           return result = tokenData.accessToken;
         }
       })

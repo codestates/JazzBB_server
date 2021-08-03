@@ -21,10 +21,14 @@ module.exports = {
   },
   reservationRead: async (req, res) => {
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
+    if (!newAccesstoken) {
+      return res.status(404).send("not found Accesstoken");
+    }
 
-    const showId = req.body.showId
-    const userId = req.body.userId
+    let showId = req.body.showId
+    let userId = req.body.userId
+    let jazzbarId = req.body.jazzbarId
 
     let reservationInfo;
     let reservationData;
@@ -46,23 +50,35 @@ module.exports = {
       reservationData = reservationInfo.map((el) => {
         return { id: el.dataValues.id, showId: el.dataValues.showId, userId: el.dataValues.userId, people: el.dataValues.people, confirm: el.dataValues.confirm, user: el.dataValues.user.dataValues }
       });
+    } else if( jazzbarId ){
+      let showList = await show.findAll({
+        where:{ jazzbarId : jazzbarId}
+      });
+      showId = showList.map(el => el.id);
+
+      reservationInfo = await reservation.findAll({
+        include: [{ model: user },{ model: show}],
+        where: { showId: showId },
+      })
+      reservationData = reservationInfo.map((el) => {
+        return { id: el.dataValues.id, showId: el.dataValues.showId, userId: el.dataValues.userId, people: el.dataValues.people, confirm: el.dataValues.confirm, user: el.dataValues.user.dataValues , show: el.dataValues.show.dataValues }
+      });
     }
     if (!reservationData) {
       return res.status(404).send("not found");
     }
     else if (reservationData) {
-
       return res.status(200).send({ data: { list: reservationData, accessToken: newAccesstoken }, message: "OK" });
     }
   },
   reservationUpdate: async (req, res) => {
     const { id, people, confirm, showId } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
     if (!newAccesstoken) {
       return res.status(404).send("not found");
     }
-    let userId = util.getUserId(req, res);
+    let userId = await util.getUserId(req, res);
     const userInfo = await user.findOne({
       where: { userId: userId }
     })
@@ -92,7 +108,7 @@ module.exports = {
   reservationDelete: async (req, res) => {
     const { id } = req.body;
     //토큰 유효성 검사
-    let newAccesstoken = util.getToken(req, res);
+    let newAccesstoken = await util.getToken(req, res);
 
     if (!id || !newAccesstoken) {
       return res.status(404).send("Not found");
