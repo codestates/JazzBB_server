@@ -24,6 +24,7 @@ module.exports = {
 
     const { username, usertype, mobile } = req.body;
     //토큰 유효성 검사
+    console.log(req.body)
     let newAccesstoken = await util.getToken(req, res);
     //토큰에서 userId 추출
     let userId = await util.getUserId(req, res);
@@ -31,7 +32,7 @@ module.exports = {
     if (!userId || !username || !usertype || !mobile || !newAccesstoken) {
       res.status(404).send("Fill all content");
     } else {
-      await user.update({
+      const newUserInfo = await user.update({
         username: username,
         mobile: mobile,
         usertype: usertype,
@@ -40,7 +41,7 @@ module.exports = {
           userId: userId
         }
       })
-      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "OK" })
+      return res.status(200).send({ data: { accessToken: newAccesstoken, userinfo: newUserInfo }, message: "OK" })
     }
   },
   userDelete: async (req, res) => {
