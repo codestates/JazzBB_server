@@ -9,11 +9,12 @@ module.exports = {
 
     //토큰에서 userId 추출
     let userId = await util.getUserId(req, res);
+    let thumbnail = ''
+    if(req.file){
+      //thumbnail 받아오기
+      thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
+    }
     
-    //thumbnail 받아오기
-    let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
-    // let thumbnail = process.env.WEBSITE + '/image/' + req.file.mimetype.split('/')
-
     if ( !address || !barName || !defaultSeat || !area) {
       res.status(404).send("not found");
     } else {

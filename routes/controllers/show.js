@@ -14,6 +14,8 @@ module.exports = {
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 
+    console.log(req.file, ": req.file @@@@@@@@ : ")
+
     if (!time || !date || !content || !showCharge) {
       res.status(422).send("insufficient parameters supplied");
     } else {
