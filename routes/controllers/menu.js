@@ -4,23 +4,32 @@ const util = require('./utilFunction')
 module.exports = {
   menuCreate: async (req, res) => {
     const { jazzbarId } = req.body;
-    console.log('********', req.body)
     //토큰 유효성 검사
     let newAccesstoken = await util.getToken(req, res);
-
     if (!newAccesstoken) {
       return res.status(404).send("not found Accesstoken");
     }
     let jazzId = Number(jazzbarId)
+    console.log(jazzbarId, typeof jazzbarId, " : ******** jazzbarId,")
+    console.log(jazzId, typeof jazzId, " : ******** jazzId,")
     if (!jazzbarId) {
       res.status(404).send("not found");
     } else {
-      const promise = await Promise.all(req.files.map(data => menu.create(
-        {
+      if(req.files){
+        //thumbnail 받아오기
+        let thumbnail = req.files.map((el)=> {
+          return process.env.WEBSITE + '/image/' + el.filename
+        })
+        thumbnail = thumbnail.toString();
+        await menu.create({
           jazzbarId: jazzId,
-          thumbnail: process.env.WEBSITE + '/image' + data.filename
-        }
-      )))
+          thumbnail: thumbnail,
+        })
+      } else if(!req.files) {
+        await menu.create({
+          jazzbarId: jazzId,
+        })
+      }
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "created" })
     }
   },
@@ -41,7 +50,7 @@ module.exports = {
     }
   },
   menuUpdate: async (req, res) => {
-    const { name, price, kind, content } = req.body;
+    const { name, price, kind, content, jazzbarId } = req.body;
     //토큰 유효성 검사
     let newAccesstoken = await util.getToken(req, res);
     if (!newAccesstoken) {
@@ -51,10 +60,15 @@ module.exports = {
     if (!name || !price || !kind || !content) {
       res.status(404).send("Fill all content OR token");
     } 
-
-    if(req.file){
+    
+    if(req.files){
       //thumbnail 받아오기
-      let thumbnail = process.env.WEBSITE + '/image/' + req.files.filename;
+      let thumbnail = req.files.map((el)=> {
+        return process.env.WEBSITE + '/image/' + el.filename
+      })
+      console.log(thumbnail, "******** thumbnail")
+      thumbnail = thumbnail.toString();
+      console.log(thumbnail, "******** thumbnail toString")
       await menu.update({
         name: name,
         price: price,
@@ -63,7 +77,7 @@ module.exports = {
         thumbnail: thumbnail,
       }, {
         where: {
-          id: id,
+          jazzbarId: jazzbarId,
         }
       })
     } else {
@@ -74,7 +88,7 @@ module.exports = {
         content: content,
       }, {
         where: {
-          id: id,
+          jazzbarId: jazzbarId,
         }
       })
     }
