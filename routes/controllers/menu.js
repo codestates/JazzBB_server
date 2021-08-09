@@ -10,8 +10,6 @@ module.exports = {
       return res.status(404).send("not found Accesstoken");
     }
     let jazzId = Number(jazzbarId)
-    console.log(jazzbarId, typeof jazzbarId, " : ******** jazzbarId,")
-    console.log(jazzId, typeof jazzId, " : ******** jazzId,")
     if (!jazzbarId) {
       res.status(404).send("not found");
     } else {
@@ -62,13 +60,14 @@ module.exports = {
     } 
     
     if(req.files){
+      // 기존 thumbnail 삭제
+      let pic = await menu.findOne({where : {jazzbarId : jazzbarId}})
+      await util.deletePic(pic.dataValues.thumbnail);
       //thumbnail 받아오기
       let thumbnail = req.files.map((el)=> {
         return process.env.WEBSITE + '/image/' + el.filename
       })
-      console.log(thumbnail, "******** thumbnail")
       thumbnail = thumbnail.toString();
-      console.log(thumbnail, "******** thumbnail toString")
       await menu.update({
         name: name,
         price: price,

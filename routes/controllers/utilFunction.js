@@ -1,6 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const fs = require('fs');
 cookieParser();
 
 // 함수 형태로 만들것.
@@ -68,6 +69,19 @@ utilFunctions = {
         user_id = data.data.id
       })
     return user_id
+  },
+  deletePic : async (address) => {
+    let arr = await address.split(',');
+    await arr.map((el) => {
+      let path = "uploads/" + el.slice(el.lastIndexOf('/') +1)
+      fs.unlink(path, function (err) {
+        if (err) {
+          console.error('File removed err!!');
+        } else {
+          console.log("File removed");
+        }
+      });
+    })
   }
 
 };

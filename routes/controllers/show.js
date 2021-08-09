@@ -14,8 +14,6 @@ module.exports = {
     //thumbnail 받아오기
     let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
 
-    console.log(req.file, ": req.file @@@@@@@@ : ")
-
     if (!time || !date || !content || !showCharge) {
       res.status(422).send("insufficient parameters supplied");
     } else {
@@ -61,6 +59,10 @@ module.exports = {
     } 
     console.log(req.file)
     if(req.file){
+      // 기존 thumbnail 삭제
+      let pic = await show.findOne({where : {jazzbarId : jazzbarId}})
+      await util.deletePic(pic.dataValues.thumbnail);      
+
       //thumbnail 받아오기
       let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
       await show.update({
