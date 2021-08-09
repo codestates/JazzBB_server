@@ -64,6 +64,10 @@ module.exports = {
     }
 
     if(req.file){
+      // 기존 thumbnail 삭제
+      let pic = await jazzbar.findOne({where : {id : jazzbarId}})
+      await util.deletePic(pic.dataValues.thumbnail);
+
       //thumbnail 받아오기
       let thumbnail = process.env.WEBSITE + '/image/' + req.file.filename;
       await jazzbar.update({
