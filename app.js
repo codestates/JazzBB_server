@@ -17,7 +17,6 @@ const app = express();
 app.set('port', process.env.PORT || 4000);
 
 //multer 설정
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/')
@@ -33,26 +32,7 @@ const imageFilter = (req, file, cb) => {
       }
       cb(null, true);
     };
-    
-    const multerStorage = multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-      },
-      filename: (req, file, cb) => {
-        const ext = file.mimetype.split('/')[1];
-        cb(null, `user-${file.originalname}-${Date.now()}.${ext}`);
-      }
-    });
-    const multerFilter = (req, file, cb) => {
-      if (file.mimetype.startsWith('image')) {
-        cb(null, true);
-      } else {
-        cb(new AppError('Not an image! Please upload an image.', 400), false);
-      }
-    };
 const upload = multer({storage : storage, limits : { filesize : 5 * 1024 * 1024 }, fileFilter: imageFilter })
-// const upload = multer({storage : storage, fileFilter: imageFilter });
-// const upload = multer({storage: multerStorage, fileFilter: multerFilter});
 
 app.use('/image',express.static('./uploads'));
 

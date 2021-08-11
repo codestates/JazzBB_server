@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.user, {
         foreignkey : 'userId',
+        onDelete: 'CASCADE',
         // targetKey : 'id',
       });
       

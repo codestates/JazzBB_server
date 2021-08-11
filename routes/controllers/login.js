@@ -57,15 +57,10 @@ module.exports = {
             console.error(error);
         }
     })
-    
     await res.cookie("refreshToken", refresh_token, {
       httpOnly: true,
     })
-
-    // await console.log(res, '@@@@@@@@@@@@@@@@@@@@s')
-    
-    return res.status(200).send({data : { accessToken : tokenData.accessToken, jazzbarId : jazzbarId, userinfo: userInfo }})  
-    
+    return res.status(200).send({data : { accessToken : tokenData.accessToken, jazzbarId : jazzbarId, userinfo: userInfo }})   
   },
   logout: async (req,res) => {
     await axios({

@@ -49,7 +49,6 @@ module.exports = {
       if (!reviewInfo) {
         return res.status(404).send("not found reviewInfo");
       } else {
-        console.log('@@@@@@@@@@@@@@@@@@@@@@', reviewInfo)
         return res.status(200).send({ data: { list: reviewInfo }, message: "OK" });
       }
     }
@@ -90,47 +89,31 @@ module.exports = {
       if (!reviewInfo) {
         return res.status(404).send("not found reviewInfo");
       } else {
+        console.log("******** reviewRead: ", reviewData );
         return res.status(200).send({ data: { list: reviewData }, message: "OK" });
       }
     }
   },
   reviewUpdate: async (req, res) => {
-    const { jazzbarId, boardId, point, content } = req.body;
+    const { id, point, content } = req.body;
+    // jazzbarId, boardId
     //토큰 유효성 검사
     let newAccesstoken = await util.getToken(req, res);
-
     //토큰에서 userId 추출
     let userId = await util.getUserId(req, res);
 
     if (!point || !content) {
       res.status(404).send("Fill all content");
     }
-    else if (jazzbarId) {
-      await review.update({
-        point: point,
-        content: content,
-      }, {
-        where: {
-          jazzbarId: jazzbarId,
-          userId: userId,
-        }
-      })
-      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
-    }
-    else if (boardId) {
-      await review.update({
-        point: point,
-        content: content,
-      }, {
-        where: {
-          boardId: boardId,
-          userId: userId,
-        }
-      })
-      return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
-    } else {
-      return res.status(404).send("something is wrong. check your code!!")
-    }
+    await review.update({
+      point: point,
+      content: content,
+    }, {
+      where: {
+        id: id
+      }
+    })
+    return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated" })
   },
   reviewDelete: async (req, res) => {
     const { id } = req.body;
