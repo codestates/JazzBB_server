@@ -90,6 +90,7 @@ module.exports = {
       if (!reviewInfo) {
         return res.status(404).send("not found reviewInfo");
       } else {
+        console.log("******** reviewRead: ", reviewData );
         return res.status(200).send({ data: { list: reviewData }, message: "OK" });
       }
     }
