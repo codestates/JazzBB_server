@@ -96,8 +96,11 @@ module.exports = {
         where: { id: jazzbarId },
         attributes: ['defaultSeat']
       });
-      const reservationPeople = await reservation.sum('people', { where: { confirm: confirm, showId: showId } });
-      const currentSeat = defaultSeat - reservationPeople;
+      const reservationPeople = await reservation.sum('people', { where: { confirm: 'confirmed', showId: showId } });
+      const currentSeat = defaultSeat.dataValues.defaultSeat - reservationPeople;
+      console.log("******** defaultSeat : ", defaultSeat.dataValues.defaultSeat);
+      console.log("******** reservationPeople : ", reservationPeople);
+      console.log("******** currentSeat : ", currentSeat);
       await show.update({currentSeat: currentSeat}, {where: {id: showId}});
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "Updated confirm state!" })
     } else {
