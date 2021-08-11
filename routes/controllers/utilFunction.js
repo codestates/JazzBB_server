@@ -10,6 +10,7 @@ utilFunctions = {
   getToken: async (req, res) => {
     console.log("토큰요청중...");
     let token = req.headers.authorization;
+    console.log(req.body)
     let refresh_token = req.headers.cookie.replace('refreshToken=', '')
     // accessToken, refreshToken 둘다 따로 지정해야됨//
     let tokenData = {};
