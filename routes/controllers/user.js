@@ -55,7 +55,7 @@ module.exports = {
     } else {
       await user.destroy({
         where: {
-          userId: userInfo.id,
+          userId: userId,
         }
       });
       return res.status(200).send({ data: { accessToken: newAccesstoken }, message: "OK" });

@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignkey : 'userId',
         // targetKey : 'id',
         // as : 'user'
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.show, {
         foreignkey : 'showId',
