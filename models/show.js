@@ -13,11 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.jazzbar, {
         foreignkey : 'jazzbarId',
-        // targetKey : 'id',
+        onDelete: 'cascade',
       });
       this.hasMany(models.reservation, {
         foreignKey: 'showId',
-        // sourceKey : 'id',
         onDelete: "cascade"
       });
     }

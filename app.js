@@ -17,6 +17,12 @@ const app = express();
 app.set('port', process.env.PORT || 4000);
 
 //multer 설정
+try {
+  fs.readdirSync('uploads');
+} catch(error) {
+  console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다.');
+  fs.mkdirSync('uploads');
+}
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/')

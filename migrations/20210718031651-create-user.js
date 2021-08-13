@@ -12,6 +12,9 @@ module.exports = {
       userId: {
         type: Sequelize.STRING
       },
+      userEmail: {
+        type: Sequelize.STRING
+      },
       username: {
         type: Sequelize.STRING
       },
@@ -27,6 +30,7 @@ module.exports = {
       jazzbarId: {
         type: Sequelize.INTEGER,
         foreignKey: true,
+        onDelete: 'CASCADE',
         references: {
           model: 'jazzbars',
           key: 'id'

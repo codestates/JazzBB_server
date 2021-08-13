@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.jazzbar, {
         foreignkey : 'jazzbarId',
-        // targetKey : 'id',
+        onDelete: 'CASCADE',
       });
     }
   };
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     thumbnail: DataTypes.STRING,
     price: DataTypes.STRING,
     kind: DataTypes.STRING,
-    content: DataTypes.STRING
+    content: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'menu',

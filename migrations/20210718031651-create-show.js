@@ -5,6 +5,7 @@ module.exports = {
       id: {
         allowNull: false,
         autoIncrement: true,
+        onDelete: 'CASCADE',
         primaryKey: true,
         type: Sequelize.INTEGER
       },
@@ -23,6 +24,7 @@ module.exports = {
       jazzbarId: {
         type: Sequelize.INTEGER,
         foreignKey: true,
+        onDelete: 'CASCADE',
         references: {
           model: 'jazzbars',
           key: 'id'

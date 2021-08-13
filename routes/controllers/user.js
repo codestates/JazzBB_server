@@ -1,6 +1,6 @@
 const util = require('./utilFunction');
 require("dotenv").config();
-const { user } = require("../../models");
+const { user, jazzbar } = require("../../models");
 
 
 module.exports = {
@@ -49,6 +49,17 @@ module.exports = {
     let newAccesstoken =  await util.getToken(req, res);
     //토큰에서 userId 추출
     let userId = await util.getUserId(req, res);
+    
+    let userData = await user.findOne({ where : {userId : userId}})
+    let jazzbarId = userData.dataValues.jazzbarId
+    console.log("******** : ", jazzbarId)
+    if(jazzbarId){
+      await jazzbar.destroy({
+        where: {
+          id: jazzbarId,
+        }
+      });
+    }
 
     if (!userId) {
       return res.status(404).send("not found");

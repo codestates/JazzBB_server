@@ -19,6 +19,7 @@ module.exports = {
       },
       showId: {
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         foreignKey: true,
         references: {
           model: 'shows',

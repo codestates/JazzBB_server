@@ -13,14 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.user, {
         foreignkey : 'userId',
-        // targetKey : 'id',
-        // as : 'user'
         onDelete: 'CASCADE',
       });
       this.belongsTo(models.show, {
         foreignkey : 'showId',
-        // targetKey : 'id',
-        // as : 'show'
+        onDelete: 'CASCADE',
       });
     }
   };
