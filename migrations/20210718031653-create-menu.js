@@ -11,6 +11,7 @@ module.exports = {
       jazzbarId: {
         type: Sequelize.INTEGER,
         foreignKey: true,
+        onDelete: 'CASCADE',
         references: {
           model: 'jazzbars',
           key: 'id'

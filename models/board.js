@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.user, {
         foreignkey : 'userId',
         onDelete: 'CASCADE',
-        // targetKey : 'id',
       });
       
     }
@@ -22,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   board.init({
     userId: DataTypes.INTEGER,
     title: DataTypes.STRING,
-    content: DataTypes.STRING,
+    content: DataTypes.TEXT,
     thumbnail: DataTypes.STRING,
   }, {
     sequelize,

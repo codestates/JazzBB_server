@@ -50,6 +50,7 @@ module.exports = {
                   userId : data.data.id,
                   username : data.data.properties.nickname,
                   thumbnail : data.data.properties.thumbnail_image,
+                  userEmail : data.data.kakao_account.email,
                 });
                 userInfo = newUser;
             }
