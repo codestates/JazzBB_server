@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       thumbnail: {
-        type: Sequelize.STRING
+        type: Sequelize.LONGTEXT
       },
       price: {
         type: Sequelize.STRING
