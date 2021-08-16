@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   board.init({
     userId: DataTypes.INTEGER,
     title: DataTypes.STRING,
-    content: DataTypes.LONGTEXT,
+    content: DataTypes.TEXT('long'),
     thumbnail: DataTypes.STRING,
   }, {
     sequelize,
