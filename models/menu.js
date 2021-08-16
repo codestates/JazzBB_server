@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   menu.init({
     jazzbarId: DataTypes.INTEGER,
     name: DataTypes.STRING,
-    thumbnail: DataTypes.LONGTEXT,
+    thumbnail: DataTypes.TEXT('long'),
     price: DataTypes.STRING,
     kind: DataTypes.STRING,
     content: DataTypes.STRING,

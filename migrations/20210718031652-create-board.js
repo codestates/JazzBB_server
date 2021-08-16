@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       content: {
-        type: Sequelize.LONGTEXT
+        type: Sequelize.TEXT
       },
       thumbnail: {
         type: Sequelize.STRING
